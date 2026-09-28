@@ -1,0 +1,57 @@
+<!-- Created: 2026-09-26 21:46 -->
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>상식 퀴즈</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <main class="container">
+    <!-- 시작 화면 -->
+    <section id="start-screen" class="screen active">
+      <h1>상식 퀴즈</h1>
+      <p class="subtitle">한국사 · 과학 · 지리 · 일반상식</p>
+      <label for="category-select">카테고리</label>
+      <select id="category-select"></select>
+      <label class="checkbox">
+        <input type="checkbox" id="shuffle-check" checked>
+        문제 순서 섞기
+      </label>
+      <button id="start-btn" class="primary">게임 시작</button>
+    </section>
+
+    <!-- 퀴즈 화면 -->
+    <section id="quiz-screen" class="screen">
+      <div class="quiz-header">
+        <span id="progress-text"></span>
+        <span id="score-text"></span>
+      </div>
+      <div class="progress-bar"><div id="progress-fill"></div></div>
+      <div class="badges">
+        <span id="question-category" class="badge"></span>
+        <span id="question-difficulty" class="badge difficulty"></span>
+      </div>
+      <h2 id="question-text"></h2>
+      <div id="options"></div>
+      <div id="feedback" class="feedback hidden">
+        <p id="feedback-title"></p>
+        <p id="feedback-explanation"></p>
+      </div>
+      <button id="next-btn" class="primary hidden">다음 문제</button>
+    </section>
+
+    <!-- 결과 화면 -->
+    <section id="result-screen" class="screen">
+      <h1>게임 종료</h1>
+      <p id="result-score" class="result-score"></p>
+      <p id="result-detail"></p>
+      <button id="restart-btn" class="primary">처음으로</button>
+    </section>
+  </main>
+
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+# Created: 2026-09-28 11:26
+# OS
+Thumbs.db
+Desktop.ini
+.DS_Store
+
+# Editor
+.vscode/
+.idea/
+
+# Node (테스트 도구를 설치할 경우)
+node_modules/
+
+# Claude Code 로컬 설정
+.claude/settings.local.json
