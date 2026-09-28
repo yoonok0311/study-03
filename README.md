@@ -5,7 +5,12 @@
 
 VibeCoding 학습 시리즈의 세 번째 프로젝트입니다.
 
-## 실행 방법
+## 바로 플레이하기
+
+- **상식 퀴즈**: https://yoonok0311.github.io/study-03/
+- **퀴즈 게임 - 지식의 도전**: https://yoonok0311.github.io/study-03/Study-03-basic/
+
+## 내 컴퓨터에서 실행하기
 
 1. 저장소를 내려받습니다.
    ```bash
@@ -43,14 +48,12 @@ study-03/
 ├── questions.js      # 문제 데이터와 카테고리 필터
 ├── style.css
 ├── CLAUDE.md         # Claude Code 작업 지침과 문제 검증 가이드라인
-├── 대화기록-2026-09-28.txt
 └── Study-03-basic/
     ├── index.html
     ├── script.js     # 게임 로직
     ├── questions.js  # 문제 데이터
     ├── style.css
-    ├── CLAUDE.md
-    └── taehojo vibecoding master Study-03-Study-03-basic.zip   # 최초 원본
+    └── CLAUDE.md
 ```
 
 ## 문제 추가하기

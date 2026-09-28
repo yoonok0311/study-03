@@ -44,7 +44,7 @@ VibeCoding 학습 시리즈의 하나입니다 (Study-01: 데스크톱과 웹 �
 
 ## Git
 
-`study-03/` 폴더가 git 저장소 루트입니다 (기본 브랜치 `main`, 원격 `origin` = https://github.com/yoonok0311/study-03). `Study-03-basic/`도 같은 저장소에 포함됩니다. 사용자가 명시적으로 요청할 때만 커밋합니다.
+`study-03/` 폴더가 git 저장소 루트입니다 (기본 브랜치 `main`, 원격 `origin` = https://github.com/yoonok0311/study-03). `Study-03-basic/`도 같은 저장소에 포함됩니다. GitHub Pages(`main` 브랜치 루트)로 https://yoonok0311.github.io/study-03/ 에 배포되며, zip 원본과 대화 기록은 `.gitignore`로 저장소에서 제외합니다. 사용자가 명시적으로 요청할 때만 커밋합니다.
 
 ## 퀴즈 문제 교차 검증 가이드라인
 
