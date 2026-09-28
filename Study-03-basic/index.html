@@ -4,7 +4,667 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>퀴즈 게임 - 지식의 도전</title>
-    <link rel="stylesheet" href="style.css">
+    <style>
+        :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --success-color: #10b981;
+            --danger-color: #ef4444;
+            --bg-color: #ffffff;
+            --text-color: #333333;
+            --text-secondary: #666666;
+            --border-color: #e5e7eb;
+            --shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            --animation-speed: 0.3s;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+            min-height: 100vh;
+            padding: 20px;
+            transition: background 0.3s ease;
+        }
+
+        .container {
+            width: 100%;
+            max-width: 800px;
+            margin: 0 auto;
+            background: var(--bg-color);
+            border-radius: 20px;
+            box-shadow: var(--shadow);
+            overflow: hidden;
+            min-height: 600px;
+            transition: all 0.3s ease;
+        }
+
+        .screen {
+            display: none;
+            animation: fadeIn 0.3s ease-in-out;
+        }
+
+        .screen.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* 시작 화면 */
+        .start-content {
+            padding: 60px 40px;
+            text-align: center;
+        }
+
+        .title {
+            font-size: 3em;
+            color: #333;
+            margin-bottom: 10px;
+            animation: bounce 1s ease-in-out;
+        }
+
+        @keyframes bounce {
+            0%, 100% { transform: translateY(0); }
+            50% { transform: translateY(-10px); }
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            color: #666;
+            margin-bottom: 40px;
+        }
+
+        .categories-preview {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 40px;
+            flex-wrap: wrap;
+        }
+
+        .category-chip {
+            padding: 10px 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border-radius: 25px;
+            font-size: 0.95em;
+            font-weight: 500;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .shuffle-option {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            margin: -20px 0 30px;
+            color: var(--text-secondary);
+            cursor: pointer;
+        }
+
+        .shuffle-option input {
+            width: 18px;
+            height: 18px;
+            cursor: pointer;
+            accent-color: var(--primary-color);
+        }
+
+        /* 버튼 스타일 */
+        .btn {
+            padding: 15px 40px;
+            font-size: 1.1em;
+            font-weight: 600;
+            border: none;
+            border-radius: 50px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            box-shadow: 0 4px 15px rgba(102, 126, 234, 0.4);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-secondary {
+            background: #4CAF50;
+            color: white;
+            box-shadow: 0 4px 15px rgba(76, 175, 80, 0.3);
+        }
+
+        .btn-secondary:hover {
+            background: #45a049;
+            transform: translateY(-2px);
+        }
+
+        /* 퀴즈 화면 */
+        .quiz-header {
+            padding: 25px 30px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .progress-info {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .score-info {
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+
+        .progress-bar {
+            height: 6px;
+            background: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #4CAF50, #8BC34A);
+            transition: width 0.5s ease;
+            width: 0%;
+        }
+
+        .quiz-content {
+            padding: 40px 30px;
+        }
+
+        .category-badge {
+            display: inline-block;
+            padding: 8px 16px;
+            background: #f5f5f5;
+            color: #666;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            margin-bottom: 20px;
+        }
+
+        .question {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 30px;
+            line-height: 1.4;
+        }
+
+        .options-container {
+            display: grid;
+            gap: 15px;
+        }
+
+        .option-btn {
+            padding: 18px 25px;
+            background: white;
+            border: 2px solid #e0e0e0;
+            border-radius: 12px;
+            text-align: left;
+            font-size: 1.05em;
+            color: #333;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .option-btn:hover:not(.disabled) {
+            background: #f8f9fa;
+            border-color: #667eea;
+            transform: translateX(5px);
+        }
+
+        .option-btn.selected {
+            background: #667eea;
+            color: white;
+            border-color: #667eea;
+        }
+
+        .option-btn.correct {
+            background: #4CAF50;
+            color: white;
+            border-color: #4CAF50;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .option-btn.incorrect {
+            background: #f44336;
+            color: white;
+            border-color: #f44336;
+            animation: shake 0.5s ease;
+        }
+
+        .option-btn.disabled {
+            pointer-events: none;
+            opacity: 0.7;
+        }
+
+        @keyframes correctPulse {
+            0%, 100% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+        }
+
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            25% { transform: translateX(-10px); }
+            75% { transform: translateX(10px); }
+        }
+
+        /* 피드백 모달 */
+        .feedback-modal {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+            z-index: 1000;
+            max-width: 400px;
+            width: 90%;
+            text-align: center;
+            animation: modalSlideIn 0.3s ease;
+        }
+
+        .feedback-modal.show {
+            display: block;
+        }
+
+        @keyframes modalSlideIn {
+            from {
+                opacity: 0;
+                transform: translate(-50%, -60%);
+            }
+            to {
+                opacity: 1;
+                transform: translate(-50%, -50%);
+            }
+        }
+
+        .feedback-icon {
+            font-size: 3em;
+            margin-bottom: 15px;
+        }
+
+        .feedback-icon.correct::before {
+            content: "✅";
+        }
+
+        .feedback-icon.incorrect::before {
+            content: "❌";
+        }
+
+        #feedbackTitle {
+            font-size: 1.5em;
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        #feedbackExplanation {
+            color: #666;
+            line-height: 1.5;
+            margin-bottom: 20px;
+        }
+
+        /* 결과 화면 */
+        .result-content {
+            padding: 50px 30px;
+            text-align: center;
+        }
+
+        .result-title {
+            font-size: 2.5em;
+            color: #333;
+            margin-bottom: 30px;
+        }
+
+        .result-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .stat-card {
+            padding: 20px;
+            background: linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%);
+            border-radius: 15px;
+        }
+
+        .stat-value {
+            font-size: 2em;
+            font-weight: bold;
+            color: #667eea;
+            margin-bottom: 5px;
+        }
+
+        .stat-label {
+            color: #666;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .category-results {
+            margin-bottom: 30px;
+        }
+
+        .category-result {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px 20px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            margin-bottom: 10px;
+        }
+
+        .category-name {
+            font-weight: 500;
+            color: #333;
+        }
+
+        .category-score {
+            color: #667eea;
+            font-weight: bold;
+        }
+
+        .result-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin-top: 20px;
+        }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* 게임 모드 선택 */
+        .mode-list {
+            display: grid;
+            gap: 12px;
+            max-width: 460px;
+            margin: -20px auto 24px;
+            text-align: left;
+        }
+
+        .mode-option {
+            display: grid;
+            grid-template-columns: auto 1fr;
+            column-gap: 12px;
+            align-items: center;
+            padding: 14px 18px;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all var(--animation-speed) ease;
+        }
+
+        .mode-option:hover {
+            border-color: var(--primary-color);
+        }
+
+        .mode-option:has(input:checked) {
+            border-color: var(--primary-color);
+            background: #f3f0ff;
+        }
+
+        .mode-option input {
+            grid-row: span 2;
+            width: 18px;
+            height: 18px;
+            accent-color: var(--primary-color);
+        }
+
+        .mode-name {
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .mode-desc {
+            font-size: 0.9em;
+            color: var(--text-secondary);
+        }
+
+        .category-field {
+            max-width: 460px;
+            margin: 0 auto 30px;
+            text-align: left;
+        }
+
+        .category-field label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 600;
+            color: var(--text-color);
+        }
+
+        .category-field select {
+            width: 100%;
+            padding: 12px;
+            font-size: 1em;
+            border: 2px solid var(--border-color);
+            border-radius: 12px;
+        }
+
+        /* 타이머 */
+        .timer-info {
+            font-size: 1.1em;
+            font-weight: 500;
+            font-variant-numeric: tabular-nums;
+        }
+
+        .timer-info.warning {
+            color: #fecaca;
+            animation: blink 1s step-start infinite;
+        }
+
+        @keyframes blink {
+            50% { opacity: 0.4; }
+        }
+
+        .time-bar {
+            height: 6px;
+            background: #e0e0e0;
+            overflow: hidden;
+        }
+
+        .time-fill {
+            height: 100%;
+            width: 100%;
+            background: linear-gradient(90deg, #f59e0b, var(--danger-color));
+            transition: width 0.1s linear;
+        }
+
+        /* 퀴즈 도구 (배지, 힌트, 일시정지) */
+        #quizScreen {
+            position: relative;
+        }
+
+        .quiz-toolbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+
+        .badges {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .quiz-toolbar .category-badge {
+            margin-bottom: 0;
+        }
+
+        .combo-badge {
+            padding: 8px 16px;
+            background: #fff7ed;
+            color: #c2410c;
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 600;
+            animation: correctPulse 0.5s ease;
+        }
+
+        .tools {
+            display: flex;
+            gap: 8px;
+        }
+
+        .tool-btn {
+            padding: 8px 14px;
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+            border-radius: 20px;
+            font-size: 0.9em;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all var(--animation-speed) ease;
+        }
+
+        .tool-btn:hover:not(:disabled) {
+            background: var(--primary-color);
+            color: white;
+        }
+
+        .tool-btn:disabled {
+            color: #aaa;
+            border-color: var(--border-color);
+            cursor: default;
+        }
+
+        .option-btn.removed {
+            opacity: 0.3;
+            text-decoration: line-through;
+        }
+
+        /* 일시정지 화면 (문제를 가림) */
+        .pause-overlay {
+            position: absolute;
+            inset: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            background: var(--bg-color);
+            z-index: 10;
+        }
+
+        .pause-title {
+            font-size: 2em;
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+
+        .pause-overlay .btn {
+            width: 260px;
+        }
+
+        .btn-outline {
+            background: white;
+            color: var(--primary-color);
+            border: 2px solid var(--primary-color);
+        }
+
+        .btn-outline:hover {
+            background: #f3f0ff;
+        }
+
+        /* 피드백 모달의 점수 내역 */
+        .feedback-icon.timeout::before {
+            content: "⏰";
+        }
+
+        .feedback-points {
+            color: var(--primary-color);
+            font-weight: 600;
+            margin-bottom: 10px;
+        }
+
+        /* 결과 화면 모드 표시 */
+        .result-mode {
+            color: var(--text-secondary);
+            margin: -20px 0 30px;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 600px) {
+            .container {
+                border-radius: 0;
+                min-height: 100vh;
+            }
+
+            .title {
+                font-size: 2em;
+            }
+
+            .question {
+                font-size: 1.2em;
+            }
+
+            .option-btn {
+                padding: 15px 20px;
+                font-size: 1em;
+            }
+
+            .categories-preview {
+                gap: 10px;
+            }
+
+            .category-chip {
+                padding: 8px 15px;
+                font-size: 0.85em;
+            }
+
+            .result-stats {
+                grid-template-columns: repeat(2, 1fr);
+                gap: 12px;
+            }
+
+            .result-actions {
+                flex-direction: column;
+            }
+
+            .result-actions .btn {
+                width: 100%;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -132,8 +792,971 @@
         </div>
     </div>
 
-    <script src="questions.js"></script>
-    <script src="score.js"></script>
-    <script src="script.js"></script>
+    <!-- 문제 데이터 -->
+    <script>
+        const quizQuestions = [
+            // 한국사 (11문제)
+            {
+                id: 1,
+                category: "한국사",
+                difficulty: "easy",
+                question: "조선을 건국한 왕은 누구인가요?",
+                options: ["이성계", "왕건", "이방원", "세종"],
+                correctAnswer: 0,
+                explanation: "이성계(태조)는 1392년 조선을 건국했습니다."
+            },
+            {
+                id: 2,
+                category: "한국사",
+                difficulty: "medium",
+                question: "한글을 창제한 왕은 누구인가요?",
+                options: ["태조", "태종", "세종", "성종"],
+                correctAnswer: 2,
+                explanation: "세종대왕은 1443년(세종 25년) 한글을 창제하고 1446년에 반포했습니다."
+            },
+            {
+                id: 3,
+                category: "한국사",
+                difficulty: "medium",
+                question: "임진왜란이 일어난 연도는?",
+                options: ["1392년", "1592년", "1636년", "1910년"],
+                correctAnswer: 1,
+                explanation: "임진왜란은 1592년(선조 25년)에 일본의 침략으로 시작되었습니다."
+            },
+            {
+                id: 4,
+                category: "한국사",
+                difficulty: "easy",
+                question: "3·1 운동이 일어난 연도는?",
+                options: ["1910년", "1919년", "1945년", "1950년"],
+                correctAnswer: 1,
+                explanation: "3·1 운동은 1919년 3월 1일에 일어난 독립운동입니다."
+            },
+            {
+                id: 5,
+                category: "한국사",
+                difficulty: "easy",
+                question: "신라의 삼국통일을 완성한 왕은?",
+                options: ["문무왕", "무열왕", "진흥왕", "법흥왕"],
+                correctAnswer: 0,
+                explanation: "문무왕은 676년 당나라 세력을 몰아내고 삼국통일을 완성했습니다."
+            },
+            {
+                id: 6,
+                category: "한국사",
+                difficulty: "medium",
+                question: "조선시대 4대 사화 중 첫 번째는?",
+                options: ["무오사화", "갑자사화", "기묘사화", "을사사화"],
+                correctAnswer: 0,
+                explanation: "무오사화(1498년)는 연산군 때 일어난 첫 번째 사화입니다."
+            },
+            {
+                id: 7,
+                category: "한국사",
+                difficulty: "easy",
+                question: "대한민국 정부 수립일은?",
+                options: ["1945년 8월 15일", "1948년 8월 15일", "1950년 6월 25일", "1953년 7월 27일"],
+                correctAnswer: 1,
+                explanation: "대한민국 정부는 1948년 8월 15일에 수립되었습니다."
+            },
+            {
+                id: 8,
+                category: "한국사",
+                difficulty: "medium",
+                question: "조선시대 최고의 국립 교육기관은?",
+                options: ["향교", "서원", "성균관", "서당"],
+                correctAnswer: 2,
+                explanation: "성균관은 조선시대 최고의 국립 교육기관이었습니다."
+            },
+            {
+                id: 9,
+                category: "한국사",
+                difficulty: "medium",
+                question: "고려 무신정권 초기(무신정변 직후)의 최고 권력기구는?",
+                options: ["중방", "정방", "도방", "삼별초"],
+                correctAnswer: 0,
+                explanation: "중방은 1170년 무신정변 이후 무신들이 국정을 논의하던 최고 권력기구였습니다. 최충헌 집권 이후에는 교정도감이 최고 권력기구가 되었습니다."
+            },
+            {
+                id: 10,
+                category: "한국사",
+                difficulty: "hard",
+                question: "대한민국 임시정부가 처음 수립된 장소는?",
+                options: ["베이징", "난징", "충칭", "상하이"],
+                correctAnswer: 3,
+                explanation: "대한민국 임시정부는 1919년 4월 11일 중국 상하이에서 수립되었습니다. 이후 일제의 탄압을 피해 항저우, 충칭 등으로 이동했습니다."
+            },
+            {
+                id: 11,
+                category: "한국사",
+                difficulty: "hard",
+                question: "조선 후기 세도정치 시대의 '삼정의 문란'에 포함되지 않는 것은?",
+                options: ["전정", "군정", "환곡", "공납"],
+                correctAnswer: 3,
+                explanation: "삼정의 문란은 전정(토지세), 군정(군역), 환곡(환곡제)의 폐단을 지칭합니다. 공납은 대동법으로 이미 개혁되었습니다."
+            },
+
+            // 세계지리 (11문제)
+            {
+                id: 12,
+                category: "세계지리",
+                difficulty: "easy",
+                question: "면적 기준 세계에서 가장 큰 대륙은?",
+                options: ["아프리카", "아시아", "북아메리카", "남극"],
+                correctAnswer: 1,
+                explanation: "아시아는 약 44,579,000km²로 세계에서 가장 큰 대륙입니다."
+            },
+            {
+                id: 13,
+                category: "세계지리",
+                difficulty: "medium",
+                question: "일반적으로 세계에서 가장 긴 강으로 인정되는 강은?",
+                options: ["아마존강", "나일강", "양쯔강", "미시시피강"],
+                correctAnswer: 1,
+                explanation: "나일강은 약 6,650km로 일반적으로 세계에서 가장 긴 강으로 인정됩니다(브리태니커·기네스 기준). 다만 발원지를 어디로 보느냐에 따라 아마존강이 더 길다는 주장도 있습니다."
+            },
+            {
+                id: 14,
+                category: "세계지리",
+                difficulty: "easy",
+                question: "일본의 수도는?",
+                options: ["오사카", "교토", "도쿄", "요코하마"],
+                correctAnswer: 2,
+                explanation: "도쿄는 일본의 수도이자 최대 도시입니다."
+            },
+            {
+                id: 15,
+                category: "세계지리",
+                difficulty: "hard",
+                question: "세계에서 가장 깊은 해구는?",
+                options: ["마리아나 해구", "통가 해구", "필리핀 해구", "푸에르토리코 해구"],
+                correctAnswer: 0,
+                explanation: "마리아나 해구의 챌린저 해연은 약 10,930m(2020년대 측정값 10,927~10,935m)로 가장 깊습니다. 예전에 알려진 11,034m는 이후 정밀 측정으로 수정되었습니다."
+            },
+            {
+                id: 16,
+                category: "세계지리",
+                difficulty: "medium",
+                question: "극지 사막을 포함해 면적 기준 세계에서 가장 큰 사막은?",
+                options: ["사하라 사막", "고비 사막", "남극 사막", "아라비아 사막"],
+                correctAnswer: 2,
+                explanation: "강수량이 매우 적은 남극 대륙은 약 1,400만km²의 극지 사막으로 세계 최대입니다. 극지방을 제외하면 사하라 사막이 가장 큽니다."
+            },
+            {
+                id: 17,
+                category: "세계지리",
+                difficulty: "easy",
+                question: "프랑스의 수도는?",
+                options: ["런던", "베를린", "파리", "로마"],
+                correctAnswer: 2,
+                explanation: "파리는 프랑스의 수도이자 최대 도시입니다."
+            },
+            {
+                id: 18,
+                category: "세계지리",
+                difficulty: "medium",
+                question: "해발 고도 기준 세계에서 가장 높은 산은?",
+                options: ["K2", "에베레스트", "칸첸중가", "마칼루"],
+                correctAnswer: 1,
+                explanation: "에베레스트산은 해발 8,848.86m로 세계 최고봉입니다."
+            },
+            {
+                id: 19,
+                category: "세계지리",
+                difficulty: "hard",
+                question: "면적 기준 세계에서 가장 큰 호수는?",
+                options: ["바이칼호", "슈피리어호", "카스피해", "빅토리아호"],
+                correctAnswer: 2,
+                explanation: "카스피해는 약 371,000km²로 세계 최대의 호수입니다. 이름에 '해'가 붙지만 육지로 둘러싸여 있어 일반적으로 호수로 분류됩니다."
+            },
+            {
+                id: 20,
+                category: "세계지리",
+                difficulty: "easy",
+                question: "이탈리아의 수도는?",
+                options: ["밀라노", "베네치아", "로마", "나폴리"],
+                correctAnswer: 2,
+                explanation: "로마는 이탈리아의 수도입니다."
+            },
+            {
+                id: 21,
+                category: "세계지리",
+                difficulty: "medium",
+                question: "면적 기준 세계에서 가장 작은 나라는?",
+                options: ["모나코", "바티칸", "산마리노", "리히텐슈타인"],
+                correctAnswer: 1,
+                explanation: "바티칸 시국은 약 0.44km²(자료에 따라 0.49km²)로 면적 기준 세계에서 가장 작은 나라입니다."
+            },
+            {
+                id: 22,
+                category: "세계지리",
+                difficulty: "medium",
+                question: "아프리카 대륙에서 면적이 가장 큰 국가는?",
+                options: ["나이지리아", "남아프리카공화국", "알제리", "이집트"],
+                correctAnswer: 2,
+                explanation: "알제리는 약 238만km²로 아프리카에서 가장 큰 국가입니다."
+            },
+
+            // 과학 (11문제)
+            {
+                id: 23,
+                category: "과학",
+                difficulty: "easy",
+                question: "물의 화학식은?",
+                options: ["H2O", "CO2", "O2", "H2O2"],
+                correctAnswer: 0,
+                explanation: "물은 수소 원자 2개와 산소 원자 1개로 이루어진 H2O입니다."
+            },
+            {
+                id: 24,
+                category: "과학",
+                difficulty: "medium",
+                question: "지름 기준 태양계에서 가장 큰 행성은?",
+                options: ["토성", "목성", "천왕성", "해왕성"],
+                correctAnswer: 1,
+                explanation: "목성은 지름이 약 142,984km로 태양계 최대 행성입니다."
+            },
+            {
+                id: 25,
+                category: "과학",
+                difficulty: "medium",
+                question: "진공에서 빛의 속도는 초속 약 몇 km인가요?",
+                options: ["30만 km", "100만 km", "3만 km", "1000 km"],
+                correctAnswer: 0,
+                explanation: "빛의 속도는 진공에서 초속 약 299,792km입니다."
+            },
+            {
+                id: 26,
+                category: "과학",
+                difficulty: "hard",
+                question: "1953년 DNA 이중나선 구조 모델을 발표한 과학자는?",
+                options: ["다윈", "아인슈타인", "왓슨과 크릭", "멘델"],
+                correctAnswer: 2,
+                explanation: "제임스 왓슨과 프랜시스 크릭은 1953년 DNA 이중나선 구조 모델을 발표했습니다. 이 발견에는 로절린드 프랭클린의 X선 회절 사진도 중요한 역할을 했습니다."
+            },
+            {
+                id: 27,
+                category: "과학",
+                difficulty: "medium",
+                question: "원자번호 1번 원소는?",
+                options: ["헬륨", "수소", "리튬", "탄소"],
+                correctAnswer: 1,
+                explanation: "수소(H)는 원자번호 1번으로 가장 가벼운 원소입니다."
+            },
+            {
+                id: 28,
+                category: "과학",
+                difficulty: "easy",
+                question: "부피 기준 지구 대기에서 가장 많은 기체는?",
+                options: ["산소", "이산화탄소", "질소", "수소"],
+                correctAnswer: 2,
+                explanation: "질소는 건조한 공기 부피의 약 78%를 차지합니다."
+            },
+            {
+                id: 29,
+                category: "과학",
+                difficulty: "medium",
+                question: "절대온도 0도는 섭씨 몇 도인가요?",
+                options: ["-100°C", "-273.15°C", "-373°C", "0°C"],
+                correctAnswer: 1,
+                explanation: "절대영도는 -273.15°C로 이론상 가장 낮은 온도이며, 실제로는 도달할 수 없습니다."
+            },
+            {
+                id: 30,
+                category: "과학",
+                difficulty: "hard",
+                question: "광합성에서 생성되는 주요 산물은?",
+                options: ["이산화탄소와 물", "포도당과 산소", "질소와 수소", "메탄과 산소"],
+                correctAnswer: 1,
+                explanation: "광합성은 이산화탄소와 물을 이용해 포도당과 산소를 생성합니다."
+            },
+            {
+                id: 31,
+                category: "과학",
+                difficulty: "easy",
+                question: "인체에서 가장 큰 장기는?",
+                options: ["심장", "간", "폐", "피부"],
+                correctAnswer: 3,
+                explanation: "피부는 인체에서 가장 큰 장기로 체중의 약 16%를 차지합니다. 몸속 장기 중에서는 간이 가장 큽니다."
+            },
+            {
+                id: 32,
+                category: "과학",
+                difficulty: "medium",
+                question: "상대성 이론을 발표한 과학자는?",
+                options: ["뉴턴", "갈릴레이", "아인슈타인", "호킹"],
+                correctAnswer: 2,
+                explanation: "알베르트 아인슈타인은 1905년 특수상대성이론, 1915년 일반상대성이론을 발표했습니다."
+            },
+            {
+                id: 33,
+                category: "과학",
+                difficulty: "easy",
+                question: "광합성에 필요한 기체는?",
+                options: ["산소", "이산화탄소", "질소", "수소"],
+                correctAnswer: 1,
+                explanation: "식물은 이산화탄소와 물, 빛을 이용해 광합성을 합니다."
+            },
+
+            // 예술과 문화 (11문제)
+            {
+                id: 34,
+                category: "예술과 문화",
+                difficulty: "easy",
+                question: "'모나리자'를 그린 화가는?",
+                options: ["피카소", "고흐", "다빈치", "미켈란젤로"],
+                correctAnswer: 2,
+                explanation: "레오나르도 다빈치는 1503-1519년경 모나리자를 그렸습니다."
+            },
+            {
+                id: 35,
+                category: "예술과 문화",
+                difficulty: "medium",
+                question: "베토벤이 완성한 교향곡은 총 몇 개인가요?",
+                options: ["5개", "7개", "9개", "12개"],
+                correctAnswer: 2,
+                explanation: "루트비히 판 베토벤은 총 9개의 교향곡을 작곡했습니다."
+            },
+            {
+                id: 36,
+                category: "예술과 문화",
+                difficulty: "easy",
+                question: "'해바라기' 연작으로 유명한 화가는?",
+                options: ["모네", "고흐", "르누아르", "세잔"],
+                correctAnswer: 1,
+                explanation: "빈센트 반 고흐는 1888-1889년 해바라기 연작을 그렸습니다."
+            },
+            {
+                id: 37,
+                category: "예술과 문화",
+                difficulty: "hard",
+                question: "'게르니카'를 그린 화가는?",
+                options: ["달리", "피카소", "미로", "고야"],
+                correctAnswer: 1,
+                explanation: "파블로 피카소는 1937년 스페인 내전을 주제로 게르니카를 그렸습니다."
+            },
+            {
+                id: 38,
+                category: "예술과 문화",
+                difficulty: "medium",
+                question: "'로미오와 줄리엣'의 작가는?",
+                options: ["괴테", "셰익스피어", "단테", "호메로스"],
+                correctAnswer: 1,
+                explanation: "윌리엄 셰익스피어는 1595년경 로미오와 줄리엣을 집필했습니다."
+            },
+            {
+                id: 39,
+                category: "예술과 문화",
+                difficulty: "easy",
+                question: "피아노의 건반 수는 일반적으로 몇 개인가요?",
+                options: ["52개", "66개", "88개", "100개"],
+                correctAnswer: 2,
+                explanation: "현대 피아노는 일반적으로 88개의 건반(52개 백건, 36개 흑건)을 가지고 있습니다."
+            },
+            {
+                id: 40,
+                category: "예술과 문화",
+                difficulty: "medium",
+                question: "'생각하는 사람' 조각의 작가는?",
+                options: ["로댕", "미켈란젤로", "베르니니", "도나텔로"],
+                correctAnswer: 0,
+                explanation: "오귀스트 로댕은 1880년 '지옥의 문'의 일부로 '생각하는 사람'을 구상했고, 1904년 지금의 큰 청동상으로 완성했습니다."
+            },
+            {
+                id: 41,
+                category: "예술과 문화",
+                difficulty: "hard",
+                question: "인상주의 화파의 이름은 어느 작품에서 유래했나요?",
+                options: ["수련", "인상, 해돋이", "물랭 루즈", "별이 빛나는 밤"],
+                correctAnswer: 1,
+                explanation: "클로드 모네의 '인상, 해돋이(1872)'에서 인상주의라는 이름이 유래했습니다."
+            },
+            {
+                id: 42,
+                category: "예술과 문화",
+                difficulty: "easy",
+                question: "한국의 전통 음악을 통틀어 이르는 말은?",
+                options: ["가요", "국악", "민요", "판소리"],
+                correctAnswer: 1,
+                explanation: "국악은 한국의 전통 음악을 총칭하는 말입니다. 민요와 판소리도 국악의 한 갈래입니다."
+            },
+            {
+                id: 43,
+                category: "예술과 문화",
+                difficulty: "medium",
+                question: "'돈키호테'의 작가는?",
+                options: ["세르반테스", "톨스토이", "도스토예프스키", "발자크"],
+                correctAnswer: 0,
+                explanation: "미겔 데 세르반테스는 1605년과 1615년 돈키호테를 출간했습니다."
+            },
+            {
+                id: 44,
+                category: "예술과 문화",
+                difficulty: "medium",
+                question: "레오나르도 다빈치의 '최후의 만찬'이 그려진 도시는?",
+                options: ["로마", "피렌체", "밀라노", "베네치아"],
+                correctAnswer: 2,
+                explanation: "최후의 만찬은 밀라노의 산타 마리아 델레 그라치에 수도원에 있습니다."
+            }
+        ];
+    </script>
+
+    <!-- 점수 계산 -->
+    <script>
+        // Created: 2026-09-28 14:35
+        // 점수 계산
+        const BASE_POINTS = 10;
+        const TIME_BONUS = 3;          // TIME_BONUS_LIMIT초 안에 맞히면
+        const TIME_BONUS_LIMIT = 10;
+        const NO_HINT_BONUS = 2;
+        // 연속 정답 수가 min 이상이면 bonus (위에서부터 먼저 맞는 구간 적용)
+        const COMBO_BONUS_TABLE = [
+            { min: 10, bonus: 5 },
+            { min: 5, bonus: 3 },
+            { min: 3, bonus: 2 }
+        ];
+
+        class ScoreManager {
+            // consecutiveCorrect: 이번 정답을 포함한 연속 정답 수
+            getConsecutiveBonus(consecutiveCorrect) {
+                const tier = COMBO_BONUS_TABLE.find(t => consecutiveCorrect >= t.min);
+                return tier ? tier.bonus : 0;
+            }
+
+            // 항목별 점수. 오답이면 모두 0
+            getBreakdown(isCorrect, timeSpent, consecutiveCorrect, hintUsed) {
+                if (!isCorrect) return { base: 0, time: 0, noHint: 0, combo: 0 };
+                return {
+                    base: BASE_POINTS,
+                    time: timeSpent < TIME_BONUS_LIMIT ? TIME_BONUS : 0,
+                    noHint: hintUsed ? 0 : NO_HINT_BONUS,
+                    combo: this.getConsecutiveBonus(consecutiveCorrect)
+                };
+            }
+
+            calculateScore(isCorrect, timeSpent, consecutiveCorrect, hintUsed) {
+                const b = this.getBreakdown(isCorrect, timeSpent, consecutiveCorrect, hintUsed);
+                return b.base + b.time + b.noHint + b.combo;
+            }
+        }
+
+        if (typeof module !== 'undefined') module.exports = { ScoreManager };
+    </script>
+
+    <!-- 게임 로직 -->
+    <script>
+        // 게임 모드 (timeLimit: 문제당 제한 시간(초), null이면 제한 없음)
+        const gameModes = {
+            full: { name: '🏆 전체 도전', questions: 40, timeLimit: null, description: '카테고리마다 10문제씩, 모두 40문제' },
+            category: { name: '📚 카테고리 도전', questions: 10, timeLimit: null, description: '고른 카테고리에서 10문제' },
+            speed: { name: '⚡ 스피드 퀴즈', questions: 20, timeLimit: 15, description: '전체에서 20문제, 문제당 15초' }
+        };
+
+        const HINTS_PER_GAME = 3;
+        const HINT_REMOVE_COUNT = 2;
+
+        // 문제 데이터에 나오는 순서대로 카테고리 목록
+        const categories = [...new Set(quizQuestions.map(q => q.category))];
+
+        const scoreManager = new ScoreManager();
+
+        // 게임 상태 관리
+        let gameState = createGameState('full', null, []);
+
+        function createGameState(mode, category, questions) {
+            return {
+                mode: mode,
+                category: category,
+                questions: questions,
+                currentQuestionIndex: 0,
+                score: 0,
+                correctAnswers: 0,
+                answers: [],          // 답한 문제마다 { questionId, category, selected, correct, isCorrect, timeSpent, hintUsed, points }
+                streak: 0,
+                longestStreak: 0,
+                hintsLeft: HINTS_PER_GAME,
+                hintUsed: false,      // 현재 문제에서 힌트를 썼는지
+                removedOptions: [],   // 힌트로 지운 선택지 인덱스
+                isAnswered: false,
+                isPaused: false,
+                questionStart: 0,     // performance.now() 기준
+                pauseStart: 0,
+                pausedTotal: 0,       // 현재 문제에서 일시정지로 흐른 시간(ms)
+                timerId: null,
+                endedEarly: false
+            };
+        }
+
+        // DOM 요소들
+        const startScreen = document.getElementById('startScreen');
+        const quizScreen = document.getElementById('quizScreen');
+        const resultScreen = document.getElementById('resultScreen');
+        const startBtn = document.getElementById('startBtn');
+        const nextBtn = document.getElementById('nextBtn');
+        const restartBtn = document.getElementById('restartBtn');
+        const feedbackModal = document.getElementById('feedbackModal');
+        const shuffleCheck = document.getElementById('shuffleCheck');
+        const modeList = document.getElementById('modeList');
+        const categoryField = document.getElementById('categoryField');
+        const categorySelect = document.getElementById('categorySelect');
+        const hintBtn = document.getElementById('hintBtn');
+        const pauseBtn = document.getElementById('pauseBtn');
+        const pauseOverlay = document.getElementById('pauseOverlay');
+        const timerText = document.getElementById('timerText');
+
+        // 시작 화면의 모드 선택과 카테고리 목록
+        function renderStartOptions() {
+            Object.entries(gameModes).forEach(([key, mode], i) => {
+                const label = document.createElement('label');
+                label.className = 'mode-option';
+                label.innerHTML = `
+                    <input type="radio" name="mode" value="${key}" ${i === 0 ? 'checked' : ''}>
+                    <span class="mode-name">${mode.name}</span>
+                    <span class="mode-desc">${mode.description}</span>`;
+                modeList.appendChild(label);
+            });
+            modeList.addEventListener('change', () => {
+                categoryField.classList.toggle('hidden', selectedMode() !== 'category');
+            });
+
+            categories.forEach(category => {
+                const option = document.createElement('option');
+                option.value = category;
+                option.textContent = category;
+                categorySelect.appendChild(option);
+            });
+        }
+
+        function selectedMode() {
+            return document.querySelector('input[name="mode"]:checked').value;
+        }
+
+        // Fisher-Yates 셔플 (원본 배열을 직접 섞음)
+        function shuffle(arr) {
+            for (let i = arr.length - 1; i > 0; i--) {
+                const j = Math.floor(Math.random() * (i + 1));
+                [arr[i], arr[j]] = [arr[j], arr[i]];
+            }
+            return arr;
+        }
+
+        // 모드에 맞게 문제를 무작위로 뽑음. 순서 섞기를 끄면 id 순서로 정렬
+        // 원본 quizQuestions는 그대로 두고 복사본을 사용
+        function pickQuestions(modeKey, category, shuffleOrder) {
+            const mode = gameModes[modeKey];
+            const byCategory = cat => quizQuestions.filter(q => q.category === cat);
+            let picked;
+
+            if (modeKey === 'full') {
+                const perCategory = Math.floor(mode.questions / categories.length);
+                picked = categories.flatMap(cat => shuffle(byCategory(cat)).slice(0, perCategory));
+            } else if (modeKey === 'category') {
+                picked = shuffle(byCategory(category)).slice(0, mode.questions);
+            } else {
+                picked = shuffle([...quizQuestions]).slice(0, mode.questions);
+            }
+
+            return shuffleOrder ? shuffle(picked) : picked.sort((a, b) => a.id - b.id);
+        }
+
+        // 게임 초기화
+        function initGame() {
+            const mode = selectedMode();
+            const category = mode === 'category' ? categorySelect.value : null;
+            gameState = createGameState(mode, category, pickQuestions(mode, category, shuffleCheck.checked));
+
+            // 화면 전환
+            startScreen.classList.remove('active');
+            quizScreen.classList.add('active');
+            resultScreen.classList.remove('active');
+            feedbackModal.classList.remove('show');
+            pauseOverlay.classList.add('hidden');
+            document.getElementById('timeBar').classList.toggle('hidden', !timeLimit());
+
+            // 첫 문제 로드
+            loadQuestion();
+        }
+
+        function timeLimit() {
+            return gameModes[gameState.mode].timeLimit;
+        }
+
+        // 문제 로드 및 표시
+        function loadQuestion() {
+            const question = gameState.questions[gameState.currentQuestionIndex];
+
+            // 상태 초기화
+            gameState.isAnswered = false;
+            gameState.hintUsed = false;
+            gameState.removedOptions = [];
+
+            // 진행률 업데이트
+            updateProgress();
+
+            // 카테고리 배지 업데이트
+            document.getElementById('categoryBadge').textContent = question.category;
+            updateComboBadge();
+
+            // 문제 텍스트 표시
+            document.getElementById('questionText').textContent = question.question;
+
+            // 선택지 생성
+            const optionsContainer = document.getElementById('optionsContainer');
+            optionsContainer.innerHTML = '';
+
+            question.options.forEach((option, index) => {
+                const button = document.createElement('button');
+                button.className = 'option-btn';
+                button.textContent = option;
+                button.onclick = () => handleAnswer(index);
+                optionsContainer.appendChild(button);
+            });
+
+            updateToolButtons();
+            startTimer();
+        }
+
+        // ----- 타이머 -----
+
+        // 현재 문제에서 흐른 시간(초). 일시정지한 시간은 빼고 셈
+        function elapsedSeconds() {
+            const now = gameState.isPaused ? gameState.pauseStart : performance.now();
+            return (now - gameState.questionStart - gameState.pausedTotal) / 1000;
+        }
+
+        function startTimer() {
+            stopTimer();
+            gameState.questionStart = performance.now();
+            gameState.pausedTotal = 0;
+            renderTimer();
+            gameState.timerId = setInterval(tick, 100);
+        }
+
+        function stopTimer() {
+            clearInterval(gameState.timerId);
+            gameState.timerId = null;
+        }
+
+        function tick() {
+            if (gameState.isPaused || gameState.isAnswered) return;
+            renderTimer();
+            const limit = timeLimit();
+            if (limit && elapsedSeconds() >= limit) handleAnswer(null);
+        }
+
+        function renderTimer() {
+            const limit = timeLimit();
+            const elapsed = elapsedSeconds();
+
+            if (limit) {
+                const remaining = Math.max(0, limit - elapsed);
+                timerText.textContent = `⏱ ${Math.ceil(remaining)}초`;
+                timerText.classList.toggle('warning', remaining <= 5);
+                document.getElementById('timeFill').style.width = `${(remaining / limit) * 100}%`;
+            } else {
+                timerText.textContent = `⏱ ${Math.floor(elapsed)}초`;
+                timerText.classList.remove('warning');
+            }
+        }
+
+        // ----- 일시정지 -----
+
+        // 답하기 전에만 일시정지할 수 있음 (답한 뒤에는 타이머가 이미 멈춰 있음)
+        function togglePause() {
+            if (gameState.isPaused) {
+                gameState.pausedTotal += performance.now() - gameState.pauseStart;
+                gameState.isPaused = false;
+                pauseOverlay.classList.add('hidden');
+            } else {
+                if (gameState.isAnswered) return;
+                gameState.pauseStart = performance.now();
+                gameState.isPaused = true;
+                pauseOverlay.classList.remove('hidden');
+                document.getElementById('resumeBtn').focus();
+            }
+        }
+
+        function quitGame() {
+            gameState.isPaused = false;
+            gameState.endedEarly = true;
+            pauseOverlay.classList.add('hidden');
+            endGame();
+        }
+
+        // ----- 힌트 -----
+
+        function updateToolButtons() {
+            hintBtn.textContent = `💡 힌트 (${gameState.hintsLeft})`;
+            hintBtn.disabled = gameState.hintsLeft === 0 || gameState.hintUsed || gameState.isAnswered;
+            pauseBtn.disabled = gameState.isAnswered;
+        }
+
+        // 오답 중 HINT_REMOVE_COUNT개를 무작위로 지움
+        function useHint() {
+            if (gameState.isAnswered || gameState.isPaused || gameState.hintUsed || gameState.hintsLeft === 0) return;
+
+            const question = gameState.questions[gameState.currentQuestionIndex];
+            const wrongIndexes = question.options.map((_, i) => i).filter(i => i !== question.correctAnswer);
+            const buttons = document.querySelectorAll('.option-btn');
+
+            shuffle(wrongIndexes).slice(0, HINT_REMOVE_COUNT).forEach(i => {
+                gameState.removedOptions.push(i);
+                buttons[i].classList.add('disabled', 'removed');
+            });
+
+            gameState.hintUsed = true;
+            gameState.hintsLeft--;
+            updateToolButtons();
+        }
+
+        // ----- 답변 처리 -----
+
+        // selectedIndex가 null이면 시간 초과
+        function handleAnswer(selectedIndex) {
+            if (gameState.isAnswered || gameState.isPaused) return;
+            if (gameState.removedOptions.includes(selectedIndex)) return;
+
+            gameState.isAnswered = true;
+            stopTimer();
+
+            const question = gameState.questions[gameState.currentQuestionIndex];
+            const isCorrect = selectedIndex === question.correctAnswer;
+            const limit = timeLimit();
+            const timeSpent = limit ? Math.min(elapsedSeconds(), limit) : elapsedSeconds();
+
+            // 연속 정답 처리
+            if (isCorrect) {
+                gameState.correctAnswers++;
+                gameState.streak++;
+                gameState.longestStreak = Math.max(gameState.longestStreak, gameState.streak);
+            } else {
+                gameState.streak = 0;
+            }
+
+            const breakdown = scoreManager.getBreakdown(isCorrect, timeSpent, gameState.streak, gameState.hintUsed);
+            const points = breakdown.base + breakdown.time + breakdown.noHint + breakdown.combo;
+            gameState.score += points;
+
+            // 답변 저장
+            gameState.answers.push({
+                questionId: question.id,
+                category: question.category,
+                selected: selectedIndex,
+                correct: question.correctAnswer,
+                isCorrect: isCorrect,
+                timeSpent: timeSpent,
+                hintUsed: gameState.hintUsed,
+                points: points
+            });
+
+            // UI 피드백
+            renderTimer();
+            updateProgress();
+            updateComboBadge();
+            updateToolButtons();
+            showAnswerFeedback(selectedIndex, question.correctAnswer, isCorrect);
+
+            // 피드백 모달 표시
+            setTimeout(() => {
+                showFeedback(isCorrect, selectedIndex === null, question.explanation, describePoints(isCorrect, breakdown, points));
+            }, 1000);
+        }
+
+        function updateComboBadge() {
+            const comboBadge = document.getElementById('comboBadge');
+            comboBadge.textContent = `🔥 ${gameState.streak}연속 정답`;
+            comboBadge.classList.toggle('hidden', gameState.streak < 2);
+        }
+
+        function describePoints(isCorrect, breakdown, points) {
+            if (!isCorrect) return '+0점';
+            const parts = [`기본 ${breakdown.base}`];
+            if (breakdown.time) parts.push(`빠른 답변 +${breakdown.time}`);
+            if (breakdown.noHint) parts.push(`노힌트 +${breakdown.noHint}`);
+            if (breakdown.combo) parts.push(`${gameState.streak}연속 콤보 +${breakdown.combo}`);
+            return `+${points}점 (${parts.join(' · ')})`;
+        }
+
+        // 답변 피드백 UI
+        function showAnswerFeedback(selectedIndex, correctIndex, isCorrect) {
+            const buttons = document.querySelectorAll('.option-btn');
+
+            // 모든 버튼 비활성화
+            buttons.forEach(btn => btn.classList.add('disabled'));
+
+            // 선택한 답변 표시 (시간 초과면 정답만 표시)
+            buttons[correctIndex].classList.add('correct');
+            if (!isCorrect && selectedIndex !== null) {
+                buttons[selectedIndex].classList.add('incorrect');
+            }
+        }
+
+        // 피드백 모달 표시
+        function showFeedback(isCorrect, isTimeout, explanation, pointsText) {
+            const feedbackIcon = document.getElementById('feedbackIcon');
+            const feedbackTitle = document.getElementById('feedbackTitle');
+            const feedbackExplanation = document.getElementById('feedbackExplanation');
+
+            feedbackIcon.className = `feedback-icon ${isCorrect ? 'correct' : isTimeout ? 'timeout' : 'incorrect'}`;
+            feedbackTitle.textContent = isCorrect ? '정답입니다!' : isTimeout ? '시간 초과!' : '틀렸습니다';
+            document.getElementById('feedbackPoints').textContent = pointsText;
+            feedbackExplanation.textContent = explanation;
+
+            const isLast = gameState.currentQuestionIndex === gameState.questions.length - 1;
+            nextBtn.textContent = isLast ? '결과 보기' : '다음 문제';
+
+            feedbackModal.classList.add('show');
+        }
+
+        // 다음 문제로 이동
+        function nextQuestion() {
+            feedbackModal.classList.remove('show');
+            gameState.currentQuestionIndex++;
+
+            if (gameState.currentQuestionIndex < gameState.questions.length) {
+                loadQuestion();
+            } else {
+                endGame();
+            }
+        }
+
+        // 게임 종료
+        function endGame() {
+            stopTimer();
+
+            // 화면 전환
+            quizScreen.classList.remove('active');
+            resultScreen.classList.add('active');
+
+            // 결과 표시
+            displayResults();
+        }
+
+        // 답한 문제 기록으로 결과 통계를 만듦 (중간에 그만두면 답한 문제까지만)
+        function buildResult() {
+            const answers = gameState.answers;
+            const total = answers.length;
+            const correct = answers.filter(a => a.isCorrect).length;
+
+            const categoryStats = {};
+            answers.forEach(a => {
+                if (!categoryStats[a.category]) categoryStats[a.category] = { correct: 0, total: 0 };
+                categoryStats[a.category].total++;
+                if (a.isCorrect) categoryStats[a.category].correct++;
+            });
+
+            const totalTime = answers.reduce((sum, a) => sum + a.timeSpent, 0);
+
+            return {
+                totalScore: gameState.score,
+                correctAnswers: correct,
+                totalQuestions: total,
+                accuracy: total ? Math.round((correct / total) * 100) : 0,
+                categoryStats: categoryStats,
+                averageResponseTime: total ? Math.round((totalTime / total) * 10) / 10 : 0,
+                longestStreak: gameState.longestStreak,
+                hintsUsed: HINTS_PER_GAME - gameState.hintsLeft
+            };
+        }
+
+        // 결과 표시
+        function displayResults() {
+            const result = buildResult();
+            const mode = gameModes[gameState.mode];
+
+            document.getElementById('resultMode').textContent =
+                (gameState.category ? `${mode.name} · ${gameState.category}` : mode.name) +
+                (gameState.endedEarly ? ` (전체 ${gameState.questions.length}문제 중 중간 종료)` : '');
+
+            document.getElementById('finalScore').textContent = result.totalScore;
+            document.getElementById('correctCount').textContent = `${result.correctAnswers} / ${result.totalQuestions}`;
+            document.getElementById('accuracyRate').textContent = `${result.accuracy}%`;
+            document.getElementById('avgTime').textContent = `${result.averageResponseTime}초`;
+            document.getElementById('longestStreak').textContent = result.longestStreak;
+            document.getElementById('hintsUsed').textContent = `${result.hintsUsed} / ${HINTS_PER_GAME}`;
+
+            // 카테고리별 결과
+            const categoryResults = document.getElementById('categoryResults');
+            categoryResults.innerHTML = '';
+
+            categories.filter(category => result.categoryStats[category]).forEach(category => {
+                const scores = result.categoryStats[category];
+
+                const categoryDiv = document.createElement('div');
+                categoryDiv.className = 'category-result';
+
+                const nameSpan = document.createElement('span');
+                nameSpan.className = 'category-name';
+                nameSpan.textContent = category;
+
+                const scoreSpan = document.createElement('span');
+                scoreSpan.className = 'category-score';
+                scoreSpan.textContent = `${scores.correct} / ${scores.total} (${Math.round((scores.correct / scores.total) * 100)}%)`;
+
+                categoryDiv.appendChild(nameSpan);
+                categoryDiv.appendChild(scoreSpan);
+                categoryResults.appendChild(categoryDiv);
+            });
+        }
+
+        // 진행률 업데이트
+        function updateProgress() {
+            const current = gameState.currentQuestionIndex + 1;
+            const total = gameState.questions.length;
+
+            document.getElementById('currentQuestion').textContent = current;
+            document.getElementById('totalQuestions').textContent = total;
+            document.getElementById('currentScore').textContent = gameState.score;
+
+            // 진행률 바 업데이트
+            document.getElementById('progressFill').style.width = `${(current / total) * 100}%`;
+        }
+
+        // 게임 재시작
+        function restartGame() {
+            resultScreen.classList.remove('active');
+            startScreen.classList.add('active');
+        }
+
+        // 이벤트 리스너
+        startBtn.addEventListener('click', () => {
+            initGame();
+        });
+
+        nextBtn.addEventListener('click', nextQuestion);
+        restartBtn.addEventListener('click', restartGame);
+        hintBtn.addEventListener('click', useHint);
+        pauseBtn.addEventListener('click', togglePause);
+        document.getElementById('resumeBtn').addEventListener('click', togglePause);
+        document.getElementById('quitBtn').addEventListener('click', quitGame);
+
+        // 키보드 단축키 지원 (한글 입력 상태에서도 동작하도록 H, P는 e.code로 확인)
+        document.addEventListener('keydown', (e) => {
+            if (!quizScreen.classList.contains('active')) return;
+
+            if (e.code === 'KeyP' || e.code === 'Escape') {
+                togglePause();
+                return;
+            }
+            if (gameState.isPaused) return;
+
+            if (!gameState.isAnswered) {
+                // 1-4 숫자키로 답변 선택, H로 힌트
+                if (e.key >= '1' && e.key <= '4') {
+                    handleAnswer(parseInt(e.key) - 1);
+                } else if (e.code === 'KeyH') {
+                    useHint();
+                }
+            } else if (feedbackModal.classList.contains('show')) {
+                // Enter 키로 다음 문제
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    nextQuestion();
+                }
+            }
+        });
+
+        renderStartOptions();
+    </script>
 </body>
 </html>

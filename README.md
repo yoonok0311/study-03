@@ -56,17 +56,13 @@ study-03/
 ├── style.css
 ├── CLAUDE.md         # Claude Code 작업 지침과 문제 검증 가이드라인
 └── Study-03-basic/
-    ├── index.html
-    ├── script.js     # 게임 로직
-    ├── score.js      # 점수 계산 (ScoreManager)
-    ├── questions.js  # 문제 데이터
-    ├── style.css
+    ├── index.html    # CSS·문제 데이터·점수 계산·게임 로직을 모두 담은 단일 파일
     └── CLAUDE.md
 ```
 
 ## 문제 추가하기
 
-루트 버전은 `questions.js`의 `QUESTIONS` 배열에, `Study-03-basic`은 `questions.js`의 `quizQuestions` 배열에 항목을 추가합니다.
+루트 버전은 `questions.js`의 `QUESTIONS` 배열에, `Study-03-basic`은 `index.html` 안의 `quizQuestions` 배열에 항목을 추가합니다.
 
 ```js
 {
