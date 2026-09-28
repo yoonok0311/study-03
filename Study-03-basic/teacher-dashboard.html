@@ -43,6 +43,7 @@
         .help summary { cursor:pointer; color:var(--text); } .help code { background:var(--inner); border-radius:6px; padding:1px 6px; }
         .notice { margin-top:16px; background:var(--card); border:1px solid var(--line); border-radius:12px; padding:12px 16px; font-size:.9rem; }
         .notice.error { border-color:var(--bad); color:var(--bad); } .notice p { margin:2px 0; } .notice .warn { color:var(--mid); }
+        .notice code { background:var(--inner); border-radius:6px; padding:1px 6px; } .notice .help { margin:8px 0 0; max-width:none; }
         .stats { display:grid; grid-template-columns:1fr 1fr; gap:12px; }
         .stat { background:var(--inner); border:1px solid transparent; border-radius:12px; padding:14px 8px; text-align:center; }
         .stat strong { display:block; font-size:1.7rem; color:var(--num); font-variant-numeric:tabular-nums; }
@@ -90,19 +91,23 @@
 <main>
     <header>
         <h1>📊 선생님 대시보드</h1>
-        <p id="subtitle">학생 기록 파일을 열면 반 성적을 한눈에 보여 줍니다</p>
+        <p id="subtitle">연습용 가상 학생 데이터 · 생성일시: 2026-09-28 18:36 · 기록 2026. 9. 6. ~ 2026. 9. 28.</p>
         <div class="actions">
             <button type="button" class="hbtn" id="openBtn">📂 기록 파일 열기</button>
-            <button type="button" class="hbtn" id="printBtn" hidden title="인쇄 창에서 대상을 'PDF로 저장'으로 고르세요">🖨️ PDF로 저장</button>
+            <button type="button" class="hbtn" id="printBtn" title="인쇄 창에서 대상을 'PDF로 저장'으로 고르세요">🖨️ PDF로 저장</button>
         </div>
         <input type="file" id="fileInput" accept=".json,application/json" multiple hidden>
     </header>
 
-    <section class="card drop" id="dropZone">
+    <section class="card drop" id="dropZone" hidden>
         <h2>📂 학생 기록 파일을 여기에 끌어다 놓으세요</h2>
         <p>학생들이 보낸 <code>quiz-history-이름.json</code> 여러 개나, <code>/teacher-collect</code>로 합친 <code>class.json</code>을 열 수 있습니다.</p>
         <p>파일은 이 브라우저 안에서만 읽고, 어디에도 올리거나 저장하지 않습니다.</p>
         <button type="button" class="pick" id="pickBtn">파일 고르기</button>
+    </section>
+
+    <div id="notice" class="notice">
+        <p>지금 보이는 것은 <code>/teacher-sample</code>로 만든 연습용 가상 학생 기록(<code>dashboard-20260928-1836.html</code>)입니다. <b>📂 기록 파일 열기</b>를 누르거나 파일을 이 화면에 끌어다 놓으면 우리 반 기록으로 바뀝니다. 파일은 이 브라우저 안에서만 읽습니다.</p>
         <details class="help">
             <summary>학생 기록 파일을 받는 방법</summary>
             <ol>
@@ -112,10 +117,59 @@
             </ol>
             <p>같은 파일을 두 번 열어도 같은 기록은 한 번만 셉니다.</p>
         </details>
-    </section>
-
-    <div id="notice" class="notice" hidden></div>
-    <div id="dashboard" class="grid" hidden></div>
+    </div>
+    <div id="dashboard" class="grid">
+<!-- 처음 화면: dashboard-20260928-1836.html의 본문 (연습용 가상 학생 데이터) -->
+<section class="card"><h2>📋 전체 현황</h2><div class="stats">
+  <div class="stat"><strong>8명</strong><span>총 학생 수</span></div>
+  <div class="stat"><strong>71%</strong><span>평균 정답률</span></div>
+  <div class="stat hi"><strong>85%</strong><span>최고 (서윤)</span></div>
+  <div class="stat lo"><strong>51%</strong><span>최저 (서연)</span></div>
+  <div class="stat full"><strong>50%</strong><span>목표 달성률 (정답률 70% 이상: 4/8명)</span></div>
+</div></section>
+<section class="card"><h2>📈 정답률 분포</h2><div class="chart">
+  <div class="col" title="없음"><div class="bar b1 zero" style="height:3%"></div><small>90~100%</small></div>
+  <div class="col" title="하은, 주원, 서윤"><div class="bar b2" style="height:100%">3</div><small>80~89%</small></div>
+  <div class="col" title="민준"><div class="bar b3" style="height:33.33333333333333%">1</div><small>70~79%</small></div>
+  <div class="col" title="도윤, 지유"><div class="bar b4" style="height:66.66666666666666%">2</div><small>60~69%</small></div>
+  <div class="col" title="서연, 시우"><div class="bar b5" style="height:66.66666666666666%">2</div><small>50~59%</small></div>
+  <div class="col" title="없음"><div class="bar b6 zero" style="height:3%"></div><small>50% 미만</small></div>
+</div><p class="note">막대 위에 마우스를 올리면 학생 이름이 보입니다. 기록 65판, 푼 문제 1534개 기준.</p></section>
+<section class="card"><h2>🏆 성적 Top 3</h2><ol class="list">
+  <li class="item"><span class="medal r1">1</span><span class="who"><b>서윤</b><small>140문제 · 최장 연속 13 · 9/17</small></span><span class="score">85%</span></li>
+  <li class="item"><span class="medal r2">2</span><span class="who"><b>하은</b><small>250문제 · 최장 연속 30 · 9/28</small></span><span class="score">84%</span></li>
+  <li class="item"><span class="medal r2">2</span><span class="who"><b>주원</b><small>172문제 · 최장 연속 31 · 9/27</small></span><span class="score">84%</span></li>
+</ol></section>
+<section class="card"><h2>⚠️ 주의 필요 학생</h2><ul class="list">
+  <li class="item warn-item"><span class="who"><b>서윤 <span class="good">85%</span></b><span class="tags"><span class="tag">💤11일 쉼</span></span><small>반 평균과 +14%p · 추이 0%p · 마지막 11일 전</small></span></li>
+  <li class="item warn-item"><span class="who"><b>시우 <span class="bad">57%</span></b><span class="tags"><span class="tag">📉하락</span></span><small>반 평균과 -14%p · 추이 -5%p · 마지막 2일 전</small></span></li>
+  <li class="item warn-item"><span class="who"><b>서연 <span class="bad">51%</span></b><span class="tags"><span class="tag">🔻평균보다 낮음</span><span class="tag">📉하락</span></span><small>반 평균과 -20%p · 추이 -16%p · 마지막 오늘</small></span></li>
+</ul></section>
+<section class="card"><h2>🎮 게임 종류별 정답률</h2>
+  <div class="hbar"><div class="top"><span>🏆 전체 도전</span><span><b class="mid">69%</b> <small>27판 · 8명</small></span></div><div class="track"><i class="fill-mid" style="width:69%"></i></div></div>
+  <div class="hbar"><div class="top"><span>📚 카테고리 도전</span><span><b class="mid">68%</b> <small>23판 · 8명</small></span></div><div class="track"><i class="fill-mid" style="width:68%"></i></div></div>
+  <div class="hbar"><div class="top"><span>⚡ 스피드 퀴즈</span><span><b class="mid">75%</b> <small>15판 · 6명</small></span></div><div class="track"><i class="fill-mid" style="width:75%"></i></div></div>
+<p class="note">반 구분이 없어 반별 평균 대신 게임 종류별로 나눴습니다.</p></section>
+<section class="card"><h2>📚 카테고리별 정답률</h2>
+  <div class="hbar"><div class="top"><span>세계지리</span><span><b class="mid">75%</b> <small>385문제</small></span></div><div class="track"><i class="fill-mid" style="width:75%"></i></div></div>
+  <div class="hbar"><div class="top"><span>예술과 문화</span><span><b class="mid">72%</b> <small>370문제</small></span></div><div class="track"><i class="fill-mid" style="width:72%"></i></div></div>
+  <div class="hbar"><div class="top"><span>과학</span><span><b class="mid">67%</b> <small>378문제</small></span></div><div class="track"><i class="fill-mid" style="width:67%"></i></div></div>
+  <div class="hbar"><div class="top"><span>한국사</span><span><b class="mid">66%</b> <small>401문제</small></span></div><div class="track"><i class="fill-mid" style="width:66%"></i></div></div>
+</section>
+<section class="card wide"><h2>👥 학생별 성적</h2><div class="scroll"><table>
+<thead><tr><th class="num">순위</th><th>이름</th><th class="num">정답률</th><th class="num">반 평균과 차이</th><th class="num">푼 문제</th><th class="num">판 수(중간 종료)</th><th class="num">평균 응답</th><th class="num">판당 힌트</th><th class="num">최장 연속</th><th class="num">전체 도전 최고</th><th class="num">추이</th><th>마지막 플레이</th><th>표시</th></tr></thead>
+<tbody>
+<tr><td class="num">1</td><th scope="row">서윤</th><td class="num good"><b>85%</b></td><td class="num up">+14%p</td><td class="num">140</td><td class="num">8 <small>(0)</small></td><td class="num">3.8초</td><td class="num">0.8</td><td class="num">13</td><td class="num">-</td><td class="num ">0%p</td><td>11일 전</td><td class="flags">💤11일 쉼</td></tr>
+<tr><td class="num">2</td><th scope="row">하은</th><td class="num good"><b>84%</b></td><td class="num up">+13%p</td><td class="num">250</td><td class="num">8 <small>(0)</small></td><td class="num">8.7초</td><td class="num">2.1</td><td class="num">30</td><td class="num">620</td><td class="num up">+4%p</td><td>오늘</td><td class="flags">-</td></tr>
+<tr><td class="num">2</td><th scope="row">주원</th><td class="num good"><b>84%</b></td><td class="num up">+13%p</td><td class="num">172</td><td class="num">8 <small>(2)</small></td><td class="num">10.3초</td><td class="num">2.1</td><td class="num">31</td><td class="num">565</td><td class="num up">+14%p</td><td>1일 전</td><td class="flags">📈상승</td></tr>
+<tr><td class="num">4</td><th scope="row">민준</th><td class="num mid"><b>79%</b></td><td class="num up">+8%p</td><td class="num">170</td><td class="num">8 <small>(0)</small></td><td class="num">6.4초</td><td class="num">1.6</td><td class="num">12</td><td class="num">-</td><td class="num up">+1%p</td><td>4일 전</td><td class="flags">-</td></tr>
+<tr><td class="num">5</td><th scope="row">도윤</th><td class="num mid"><b>67%</b></td><td class="num down">-4%p</td><td class="num">180</td><td class="num">9 <small>(0)</small></td><td class="num">9.9초</td><td class="num">1</td><td class="num">15</td><td class="num">395</td><td class="num up">+15%p</td><td>오늘</td><td class="flags">📈상승</td></tr>
+<tr><td class="num">6</td><th scope="row">지유</th><td class="num bad"><b>60%</b></td><td class="num down">-11%p</td><td class="num">157</td><td class="num">8 <small>(4)</small></td><td class="num">10.5초</td><td class="num">1</td><td class="num">11</td><td class="num">355</td><td class="num up">+12%p</td><td>오늘</td><td class="flags">📈상승</td></tr>
+<tr><td class="num">7</td><th scope="row">시우</th><td class="num bad"><b>57%</b></td><td class="num down">-14%p</td><td class="num">220</td><td class="num">8 <small>(0)</small></td><td class="num">5.6초</td><td class="num">0.9</td><td class="num">17</td><td class="num">397</td><td class="num down">-5%p</td><td>2일 전</td><td class="flags">📉하락</td></tr>
+<tr><td class="num">8</td><th scope="row">서연</th><td class="num bad"><b>51%</b></td><td class="num down">-20%p</td><td class="num">245</td><td class="num">8 <small>(1)</small></td><td class="num">4.5초</td><td class="num">2.1</td><td class="num">8</td><td class="num">361</td><td class="num down">-16%p</td><td>오늘</td><td class="flags">🔻평균보다 낮음 📉하락</td></tr>
+</tbody></table></div>
+<p class="note">평균·분포·목표 달성률은 20문제 이상 푼 학생 기준. 🔻 반 평균보다 15%p 이상 낮음 · 📉/📈 뒤쪽 절반 판 정답률이 5%p 이상 낮음/높음(4판 이상) · 💤 7일 이상 쉼 · 🔸 20문제 미만. 전체 도전 최고는 전체 도전 · 전체 난이도에서 끝까지 푼 게임의 최고 점수.</p></section>
+</div>
 </main>
 
 <script>
