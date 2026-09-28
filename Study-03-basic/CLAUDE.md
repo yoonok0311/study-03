@@ -35,8 +35,8 @@
 * `difficulty`: `easy` | `medium` | `hard` (데이터에만 있고 화면에는 표시하지 않음)
 * `options`: 정확히 4개의 문자열 (단축키 1~4가 선택지 4개를 전제로 함)
 * `correctAnswer`: `options`의 인덱스(0부터 시작)
-* 현재 80문제, 카테고리마다 20문제 (easy 7, medium 9, hard 4). 문제 난이도 선택 때문에 카테고리마다 easy+medium과 medium+hard가 각각 10문제 이상이어야 합니다. `id`는 배열 순서대로 1부터 빠짐없이 매깁니다.
-* 문제 수를 바꾸면 `index.html`의 부제("80개 문제에서 무작위 출제")와 `#totalQuestions` 기본값도 함께 고칩니다.
+* 현재 81문제, 한국사 21문제 (easy 7, medium 9, hard 5), 나머지 카테고리마다 20문제 (easy 7, medium 9, hard 4). 문제 난이도 선택 때문에 카테고리마다 easy+medium과 medium+hard가 각각 10문제 이상이어야 합니다. `id`는 배열 순서대로 1부터 빠짐없이 매깁니다.
+* 문제 수를 바꾸면 `index.html`의 부제("81개 문제에서 무작위 출제")와 `#totalQuestions` 기본값도 함께 고칩니다.
 
 ## 동작 참고
 

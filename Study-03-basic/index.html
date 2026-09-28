@@ -1325,7 +1325,7 @@
         <section id="startScreen" class="screen active">
             <div class="start-content">
                 <h1 class="title screen-heading" tabindex="-1">🎯 퀴즈 게임</h1>
-                <p class="subtitle">4개 카테고리, 80개 문제에서 무작위 출제</p>
+                <p class="subtitle">4개 카테고리, 81개 문제에서 무작위 출제</p>
                 <div class="categories-preview">
                     <div class="category-chip">🏛️ 한국사</div>
                     <div class="category-chip">🌍 세계지리</div>
@@ -1364,7 +1364,7 @@
         <section id="quizScreen" class="screen">
             <div class="quiz-header">
                 <div class="progress-info">
-                    <span class="sr-only">문제 </span><span id="currentQuestion">1</span> / <span id="totalQuestions">80</span>
+                    <span class="sr-only">문제 </span><span id="currentQuestion">1</span> / <span id="totalQuestions">81</span>
                 </div>
                 <div id="timerText" class="timer-info">⏱ 0초</div>
                 <div class="score-info">
@@ -1571,7 +1571,7 @@
     <!-- 문제 데이터 -->
     <script>
         const quizQuestions = [
-            // 한국사 (20문제)
+            // 한국사 (21문제)
             {
                 id: 1,
                 category: "한국사",
@@ -1752,10 +1752,19 @@
                 correctAnswer: 1,
                 explanation: "농사직설은 세종의 명으로 정초 등이 편찬했습니다. 중국 농서가 우리 풍토에 맞지 않아 각 도 농부들의 경험을 모아 만들었습니다."
             },
+            {
+                id: 21,
+                category: "한국사",
+                difficulty: "hard",
+                question: "신라 원성왕이 788년 실시한 것으로, 유교 경전을 읽은 수준에 따라 상품·중품·하품으로 나누어 관리 선발에 활용한 제도는?",
+                options: ["독서삼품과", "과거제", "기인 제도", "사심관 제도"],
+                correctAnswer: 0,
+                explanation: "독서삼품과는 788년(원성왕 4년) 국학에서 배운 유교 경전의 이해 수준을 상·중·하품으로 나누어 관리 선발에 활용한 제도입니다. 과거제는 고려 광종 때인 958년에 처음 실시되었습니다."
+            },
 
             // 세계지리 (20문제)
             {
-                id: 21,
+                id: 22,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "면적 기준 세계에서 가장 큰 대륙은?",
@@ -1764,7 +1773,7 @@
                 explanation: "아시아는 약 44,579,000km²로 세계에서 가장 큰 대륙입니다."
             },
             {
-                id: 22,
+                id: 23,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "브리태니커·기네스 기준 세계에서 가장 긴 강은?",
@@ -1773,7 +1782,7 @@
                 explanation: "나일강은 약 6,650km로 일반적으로 세계에서 가장 긴 강으로 인정됩니다(브리태니커·기네스 기준). 다만 발원지를 어디로 보느냐에 따라 아마존강이 더 길다는 주장도 있습니다."
             },
             {
-                id: 23,
+                id: 24,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "일본의 수도는?",
@@ -1782,16 +1791,16 @@
                 explanation: "도쿄는 일본의 수도이자 최대 도시입니다."
             },
             {
-                id: 24,
+                id: 25,
                 category: "세계지리",
                 difficulty: "hard",
-                question: "세계에서 가장 깊은 해구는?",
+                question: "최대 수심 기준 세계에서 가장 깊은 해구는?",
                 options: ["마리아나 해구", "통가 해구", "필리핀 해구", "푸에르토리코 해구"],
                 correctAnswer: 0,
-                explanation: "마리아나 해구의 챌린저 해연은 약 10,930m(2020년대 측정값 10,927~10,935m)로 가장 깊습니다. 예전에 알려진 11,034m는 이후 정밀 측정으로 수정되었습니다."
+                explanation: "마리아나 해구의 챌린저 해연은 약 10,935m(2021년 NOAA 측정값)로 가장 깊습니다. 예전에 알려진 11,034m는 이후 정밀 측정으로 수정되었습니다."
             },
             {
-                id: 25,
+                id: 26,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "극지 사막을 포함해 면적 기준 세계에서 가장 큰 사막은?",
@@ -1800,7 +1809,7 @@
                 explanation: "강수량이 매우 적은 남극 대륙은 약 1,400만km²의 극지 사막으로 세계 최대입니다. 극지방을 제외하면 사하라 사막이 가장 큽니다."
             },
             {
-                id: 26,
+                id: 27,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "프랑스의 수도는?",
@@ -1809,7 +1818,7 @@
                 explanation: "파리는 프랑스의 수도이자 최대 도시입니다."
             },
             {
-                id: 27,
+                id: 28,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "해발 고도 기준 세계에서 가장 높은 산은?",
@@ -1818,7 +1827,7 @@
                 explanation: "에베레스트산은 해발 8,848.86m로 세계 최고봉입니다."
             },
             {
-                id: 28,
+                id: 29,
                 category: "세계지리",
                 difficulty: "hard",
                 question: "염호를 포함해 면적 기준 세계에서 가장 큰 호수는?",
@@ -1827,7 +1836,7 @@
                 explanation: "카스피해는 약 371,000km²로 세계 최대의 호수입니다. 이름에 '해'가 붙지만 육지로 둘러싸여 있어 일반적으로 호수(염호)로 분류됩니다. 담수호 중에서는 슈피리어호(약 82,000km²)가 가장 큽니다."
             },
             {
-                id: 29,
+                id: 30,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "이탈리아의 수도는?",
@@ -1836,7 +1845,7 @@
                 explanation: "로마는 이탈리아의 수도입니다."
             },
             {
-                id: 30,
+                id: 31,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "면적 기준 세계에서 가장 작은 나라는?",
@@ -1845,7 +1854,7 @@
                 explanation: "바티칸 시국은 약 0.44km²(자료에 따라 0.49km²)로 면적 기준 세계에서 가장 작은 나라입니다."
             },
             {
-                id: 31,
+                id: 32,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "아프리카 대륙에서 면적이 가장 큰 국가는?",
@@ -1854,7 +1863,7 @@
                 explanation: "알제리는 약 238만km²로 아프리카에서 가장 큰 국가입니다. 2011년 남수단이 독립하기 전에는 수단이 가장 컸습니다."
             },
             {
-                id: 32,
+                id: 33,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "독일의 수도는?",
@@ -1863,7 +1872,7 @@
                 explanation: "베를린은 독일의 수도이자 최대 도시입니다."
             },
             {
-                id: 33,
+                id: 34,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "면적 기준 세계에서 가장 큰 대양은?",
@@ -1872,7 +1881,7 @@
                 explanation: "태평양은 약 1억 6,500만km²로 지구 표면의 약 3분의 1을 차지합니다."
             },
             {
-                id: 34,
+                id: 35,
                 category: "세계지리",
                 difficulty: "easy",
                 question: "스페인의 수도는?",
@@ -1881,7 +1890,7 @@
                 explanation: "마드리드는 스페인의 수도입니다. 바르셀로나는 카탈루냐 지방의 중심 도시입니다."
             },
             {
-                id: 35,
+                id: 36,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "오스트레일리아(호주)의 수도는?",
@@ -1890,7 +1899,7 @@
                 explanation: "캔버라는 시드니와 멜버른이 수도 자리를 두고 경쟁하자 두 도시 사이에 새로 계획해 만든 수도입니다."
             },
             {
-                id: 36,
+                id: 37,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "면적 기준 남아메리카에서 가장 큰 나라는?",
@@ -1899,7 +1908,7 @@
                 explanation: "브라질은 약 851만km²로 남아메리카 대륙 면적의 절반 가까이를 차지합니다."
             },
             {
-                id: 37,
+                id: 38,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "1869년 개통된 수에즈 운하가 잇는 두 바다는?",
@@ -1908,7 +1917,7 @@
                 explanation: "수에즈 운하는 이집트의 수에즈 지협을 가로질러 지중해와 홍해를 잇습니다. 대서양과 태평양을 잇는 것은 파나마 운하입니다."
             },
             {
-                id: 38,
+                id: 39,
                 category: "세계지리",
                 difficulty: "medium",
                 question: "경도 0도의 기준인 본초 자오선이 지나는 천문대가 있는 곳은?",
@@ -1917,7 +1926,7 @@
                 explanation: "1884년 국제 자오선 회의에서 영국 런던 그리니치 천문대를 지나는 자오선을 경도 0도의 기준으로 정했습니다."
             },
             {
-                id: 39,
+                id: 40,
                 category: "세계지리",
                 difficulty: "hard",
                 question: "해발 고도 기준 남아메리카 대륙에서 가장 높은 산은?",
@@ -1926,18 +1935,18 @@
                 explanation: "아르헨티나의 아콩카과산은 해발 약 6,961m로 남아메리카 최고봉이고, 두 번째는 오호스델살라도산(약 6,893m)입니다. 지구 중심에서 가장 먼 봉우리는 적도 부근의 침보라소산입니다."
             },
             {
-                id: 40,
+                id: 41,
                 category: "세계지리",
                 difficulty: "hard",
                 question: "메콩강이 남중국해로 흘러드는 하구가 있는 나라는?",
                 options: ["태국", "캄보디아", "베트남", "미얀마"],
                 correctAnswer: 2,
-                explanation: "메콩강(약 4,900km)은 티베트고원에서 시작해 여러 나라를 거친 뒤 베트남 남부에서 메콩 삼각주를 이루며 남중국해로 흘러듭니다."
+                explanation: "메콩강(약 4,350~4,900km, 측정 기준에 따라 다름)은 티베트고원에서 시작해 여러 나라를 거친 뒤 베트남 남부에서 메콩 삼각주를 이루며 남중국해로 흘러듭니다."
             },
 
             // 과학 (20문제)
             {
-                id: 41,
+                id: 42,
                 category: "과학",
                 difficulty: "easy",
                 question: "물의 화학식은?",
@@ -1946,7 +1955,7 @@
                 explanation: "물은 수소 원자 2개와 산소 원자 1개로 이루어진 H2O입니다."
             },
             {
-                id: 42,
+                id: 43,
                 category: "과학",
                 difficulty: "medium",
                 question: "지름 기준 태양계에서 가장 큰 행성은?",
@@ -1955,7 +1964,7 @@
                 explanation: "목성은 지름이 약 142,984km로 태양계 최대 행성입니다."
             },
             {
-                id: 43,
+                id: 44,
                 category: "과학",
                 difficulty: "medium",
                 question: "진공에서 빛의 속도는 초속 약 몇 km인가요?",
@@ -1964,7 +1973,7 @@
                 explanation: "빛의 속도는 진공에서 초속 약 299,792km입니다."
             },
             {
-                id: 44,
+                id: 45,
                 category: "과학",
                 difficulty: "hard",
                 question: "1953년 DNA 이중나선 구조 모델을 발표한 과학자는?",
@@ -1973,7 +1982,7 @@
                 explanation: "제임스 왓슨과 프랜시스 크릭은 1953년 DNA 이중나선 구조 모델을 발표했습니다. 이 발견에는 로절린드 프랭클린의 X선 회절 사진도 중요한 역할을 했습니다."
             },
             {
-                id: 45,
+                id: 46,
                 category: "과학",
                 difficulty: "medium",
                 question: "원자번호 1번 원소는?",
@@ -1982,7 +1991,7 @@
                 explanation: "수소(H)는 원자번호 1번으로 가장 가벼운 원소입니다."
             },
             {
-                id: 46,
+                id: 47,
                 category: "과학",
                 difficulty: "easy",
                 question: "부피 기준 지구 대기에서 가장 많은 기체는?",
@@ -1991,7 +2000,7 @@
                 explanation: "질소는 건조한 공기 부피의 약 78%를 차지합니다."
             },
             {
-                id: 47,
+                id: 48,
                 category: "과학",
                 difficulty: "hard",
                 question: "절대온도 0도는 섭씨 몇 도인가요?",
@@ -2000,7 +2009,7 @@
                 explanation: "절대영도는 -273.15°C로 이론상 가장 낮은 온도이며, 실제로는 도달할 수 없습니다."
             },
             {
-                id: 48,
+                id: 49,
                 category: "과학",
                 difficulty: "medium",
                 question: "광합성에서 생성되는 주요 산물은?",
@@ -2009,16 +2018,16 @@
                 explanation: "광합성은 이산화탄소와 물을 이용해 포도당과 산소를 생성합니다."
             },
             {
-                id: 49,
+                id: 50,
                 category: "과학",
                 difficulty: "easy",
                 question: "무게 기준으로 인체에서 가장 큰 기관은?",
                 options: ["심장", "간", "폐", "피부"],
                 correctAnswer: 3,
-                explanation: "피부는 몸 전체를 덮는 기관으로, 무게는 체중의 약 16%, 면적은 성인 기준 약 1.5~2m²에 이릅니다. 몸속 장기 중에서는 간(약 1.5kg)이 가장 큽니다."
+                explanation: "피부는 몸 전체를 덮는 기관으로, 무게는 체중의 약 16%(피하 조직 포함 기준), 면적은 성인 기준 약 1.5~2m²에 이릅니다. 몸속 장기 중에서는 간(약 1.5kg)이 가장 큽니다."
             },
             {
-                id: 50,
+                id: 51,
                 category: "과학",
                 difficulty: "medium",
                 question: "상대성 이론을 발표한 과학자는?",
@@ -2027,7 +2036,7 @@
                 explanation: "알베르트 아인슈타인은 1905년 특수상대성이론, 1915년 일반상대성이론을 발표했습니다."
             },
             {
-                id: 51,
+                id: 52,
                 category: "과학",
                 difficulty: "easy",
                 question: "광합성에 필요한 기체는?",
@@ -2036,7 +2045,7 @@
                 explanation: "식물은 이산화탄소와 물, 빛을 이용해 광합성을 합니다."
             },
             {
-                id: 52,
+                id: 53,
                 category: "과학",
                 difficulty: "medium",
                 question: "1869년 원소를 원자량 순으로 배열한 주기율표를 발표하고, 빈칸을 남겨 아직 발견되지 않은 원소의 존재를 예측한 러시아 화학자는?",
@@ -2045,7 +2054,7 @@
                 explanation: "드미트리 멘델레예프는 1869년 주기율표를 발표했고, 그가 예측한 갈륨(1875년), 스칸듐(1879년), 저마늄(게르마늄, 1886년)이 실제로 발견되며 주기율표가 인정받았습니다."
             },
             {
-                id: 53,
+                id: 54,
                 category: "과학",
                 difficulty: "easy",
                 question: "혈액 성분 중 산소를 주로 운반하는 것은?",
@@ -2054,7 +2063,7 @@
                 explanation: "적혈구 속 헤모글로빈이 산소와 결합해 온몸으로 운반합니다. 백혈구는 면역, 혈소판은 혈액 응고를 담당합니다."
             },
             {
-                id: 54,
+                id: 55,
                 category: "과학",
                 difficulty: "easy",
                 question: "태양계 행성 중 태양에 가장 가까운 궤도를 도는 행성은?",
@@ -2063,7 +2072,7 @@
                 explanation: "수성은 태양으로부터 평균 약 5,800만km 떨어져 있어 태양계 행성 중 가장 안쪽 궤도를 돕니다."
             },
             {
-                id: 55,
+                id: 56,
                 category: "과학",
                 difficulty: "easy",
                 question: "1기압에서 순수한 물이 끓는 온도는 섭씨 약 몇 도인가요?",
@@ -2072,7 +2081,7 @@
                 explanation: "1기압에서 순수한 물은 약 100°C에서 끓습니다. 높은 산처럼 기압이 낮은 곳에서는 더 낮은 온도에서 끓습니다."
             },
             {
-                id: 56,
+                id: 57,
                 category: "과학",
                 difficulty: "medium",
                 question: "다음 중 소리가 전달되지 않는 곳은?",
@@ -2081,7 +2090,7 @@
                 explanation: "소리는 물질의 진동으로 전달되는 파동이라 매질이 없는 진공에서는 전달되지 않습니다."
             },
             {
-                id: 57,
+                id: 58,
                 category: "과학",
                 difficulty: "medium",
                 question: "다음 중 식물 세포에는 있지만 동물 세포에는 없는 것은?",
@@ -2090,7 +2099,7 @@
                 explanation: "식물 세포는 셀룰로스로 된 세포벽이 세포막 바깥을 둘러쌉니다. 세포막, 핵, 미토콘드리아는 두 세포에 모두 있습니다."
             },
             {
-                id: 58,
+                id: 59,
                 category: "과학",
                 difficulty: "medium",
                 question: "뉴턴의 운동 법칙 중 제3법칙은?",
@@ -2099,7 +2108,7 @@
                 explanation: "제3법칙은 한 물체가 다른 물체에 힘을 가하면 크기가 같고 방향이 반대인 힘을 받는다는 작용 반작용의 법칙입니다. 제1법칙은 관성, 제2법칙은 가속도의 법칙입니다."
             },
             {
-                id: 59,
+                id: 60,
                 category: "과학",
                 difficulty: "hard",
                 question: "원소 기호가 W인 원소는?",
@@ -2108,7 +2117,7 @@
                 explanation: "텅스텐의 원소 기호 W는 독일어 이름 볼프람(Wolfram)에서 왔습니다. 텅스텐은 녹는점이 약 3,422°C로 금속 중 가장 높습니다."
             },
             {
-                id: 60,
+                id: 61,
                 category: "과학",
                 difficulty: "hard",
                 question: "길이 기준 사람 몸에서 가장 긴 뼈는?",
@@ -2119,7 +2128,7 @@
 
             // 예술과 문화 (20문제)
             {
-                id: 61,
+                id: 62,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "'모나리자'를 그린 화가는?",
@@ -2128,7 +2137,7 @@
                 explanation: "레오나르도 다빈치는 1503-1519년경 모나리자를 그렸습니다."
             },
             {
-                id: 62,
+                id: 63,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "베토벤이 완성한 교향곡은 총 몇 개인가요?",
@@ -2137,7 +2146,7 @@
                 explanation: "루트비히 판 베토벤은 총 9개의 교향곡을 작곡했습니다."
             },
             {
-                id: 63,
+                id: 64,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "'해바라기' 연작으로 유명한 화가는?",
@@ -2146,7 +2155,7 @@
                 explanation: "빈센트 반 고흐는 1888-1889년 해바라기 연작을 그렸습니다."
             },
             {
-                id: 64,
+                id: 65,
                 category: "예술과 문화",
                 difficulty: "hard",
                 question: "'게르니카'를 그린 화가는?",
@@ -2155,7 +2164,7 @@
                 explanation: "파블로 피카소는 1937년 스페인 내전을 주제로 게르니카를 그렸습니다."
             },
             {
-                id: 65,
+                id: 66,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "'로미오와 줄리엣'의 작가는?",
@@ -2164,7 +2173,7 @@
                 explanation: "윌리엄 셰익스피어는 1595년경 로미오와 줄리엣을 집필했습니다."
             },
             {
-                id: 66,
+                id: 67,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "피아노의 건반 수는 일반적으로 몇 개인가요?",
@@ -2173,7 +2182,7 @@
                 explanation: "현대 피아노는 일반적으로 88개의 건반(52개 백건, 36개 흑건)을 가지고 있습니다."
             },
             {
-                id: 67,
+                id: 68,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "'생각하는 사람' 조각의 작가는?",
@@ -2182,7 +2191,7 @@
                 explanation: "오귀스트 로댕은 1880년 '지옥의 문'의 일부로 '생각하는 사람'을 구상했고, 1904년 지금의 큰 청동상으로 완성했습니다."
             },
             {
-                id: 68,
+                id: 69,
                 category: "예술과 문화",
                 difficulty: "hard",
                 question: "인상주의 화파의 이름은 어느 작품에서 유래했나요?",
@@ -2191,7 +2200,7 @@
                 explanation: "클로드 모네의 '인상, 해돋이(1872)'에서 인상주의라는 이름이 유래했습니다."
             },
             {
-                id: 69,
+                id: 70,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "한국의 전통 음악을 통틀어 이르는 말은?",
@@ -2200,7 +2209,7 @@
                 explanation: "국악은 한국의 전통 음악을 총칭하는 말입니다. 민요와 판소리도 국악의 한 갈래입니다."
             },
             {
-                id: 70,
+                id: 71,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "'돈키호테'의 작가는?",
@@ -2209,7 +2218,7 @@
                 explanation: "미겔 데 세르반테스는 1605년과 1615년 돈키호테를 출간했습니다."
             },
             {
-                id: 71,
+                id: 72,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "레오나르도 다빈치의 '최후의 만찬'이 그려진 도시는?",
@@ -2218,7 +2227,7 @@
                 explanation: "최후의 만찬은 밀라노의 산타 마리아 델레 그라치에 수도원에 있습니다."
             },
             {
-                id: 72,
+                id: 73,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "발레 음악 '백조의 호수'를 작곡한 작곡가는?",
@@ -2227,7 +2236,7 @@
                 explanation: "러시아 작곡가 차이콥스키가 1875~1876년 작곡했고, 1877년 모스크바 볼쇼이 극장에서 초연되었습니다."
             },
             {
-                id: 73,
+                id: 74,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "바티칸 시스티나 성당의 천장화('천지창조')를 그린 화가는?",
@@ -2236,7 +2245,7 @@
                 explanation: "미켈란젤로는 1508년부터 1512년까지 시스티나 성당 천장에 '아담의 창조' 등 창세기 장면을 그렸습니다."
             },
             {
-                id: 74,
+                id: 75,
                 category: "예술과 문화",
                 difficulty: "easy",
                 question: "'어린 왕자'를 쓴 작가는?",
@@ -2245,7 +2254,7 @@
                 explanation: "프랑스 작가이자 비행사인 앙투안 드 생텍쥐페리가 1943년 발표했습니다."
             },
             {
-                id: 75,
+                id: 76,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "가야의 가실왕 때 만들어졌다고 전하며, 우륵이 신라에 전한 12줄 현악기는?",
@@ -2254,7 +2263,7 @@
                 explanation: "『삼국사기』에 따르면 가실왕이 12줄 현악기인 가야금을 만들고 우륵에게 곡을 짓게 했습니다. 거문고는 고구려의 왕산악이 만들었다고 전합니다."
             },
             {
-                id: 76,
+                id: 77,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "바이올린 협주곡 '사계'를 작곡한 이탈리아 바로크 작곡가는?",
@@ -2263,7 +2272,7 @@
                 explanation: "안토니오 비발디의 '사계'는 1725년 출판된 협주곡집 『화성과 창의의 시도』에 실린 4곡의 바이올린 협주곡입니다."
             },
             {
-                id: 77,
+                id: 78,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "오페라 '마술피리'를 작곡한 작곡가는?",
@@ -2272,7 +2281,7 @@
                 explanation: "볼프강 아마데우스 모차르트의 '마술피리'는 1791년 빈에서 초연되었습니다."
             },
             {
-                id: 78,
+                id: 79,
                 category: "예술과 문화",
                 difficulty: "medium",
                 question: "'절규'를 그린 노르웨이 화가는?",
@@ -2281,7 +2290,7 @@
                 explanation: "에드바르 뭉크는 1893년 '절규'를 처음 그렸고, 1910년까지 회화와 파스텔 등 여러 버전을 남겼습니다."
             },
             {
-                id: 79,
+                id: 80,
                 category: "예술과 문화",
                 difficulty: "hard",
                 question: "현재 전해지는 판소리 다섯 마당에 들지 않는 것은?",
@@ -2290,7 +2299,7 @@
                 explanation: "판소리 다섯 마당은 춘향가, 심청가, 흥보가, 수궁가, 적벽가입니다. 배비장타령은 옛 판소리 열두 마당에 들었지만 소리가 전하지 않습니다."
             },
             {
-                id: 80,
+                id: 81,
                 category: "예술과 문화",
                 difficulty: "hard",
                 question: "피카소와 함께 입체주의(큐비즘)를 발전시킨 프랑스 화가는?",
