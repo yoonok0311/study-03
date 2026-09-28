@@ -4,7 +4,7 @@ argument-hint: "[문제 id(예: 5 12-15) | 카테고리 | 비우면 전체]"
 ---
 <!-- Created: 2026-09-28 15:13 -->
 
-`index.html` 첫 번째 `<script>`의 `quizQuestions`를 검증합니다. 대상: $ARGUMENTS (비어 있으면 44문제 전체)
+`index.html` 첫 번째 `<script>`의 `quizQuestions`를 검증합니다. 대상: $ARGUMENTS (비어 있으면 전체 문제)
 
 검증만 하고 파일은 수정하지 않습니다. 고칠 내용은 보고서에 제안으로 적고, 사용자가 요청하면 그때 고칩니다.
 
@@ -31,19 +31,30 @@ q.forEach((x, i) => {
 });
 const dupQ = q.filter((x, i) => q.findIndex(y => y.question.trim() === x.question.trim()) !== i);
 dupQ.forEach(x => errs.push(`id ${x.id}: 같은 문제 문장이 이미 있음`));
-if (q.length !== 44) errs.push(`문제 수 ${q.length} (44여야 함)`);
-CATS.forEach(c => {
-  const n = d => q.filter(x => x.category === c && x.difficulty === d).length;
-  if (q.filter(x => x.category === c).length !== 11 || n('easy') !== 4 || n('medium') !== 5 || n('hard') !== 2)
-    errs.push(`${c}: easy ${n('easy')} / medium ${n('medium')} / hard ${n('hard')} (4/5/2여야 함)`);
+q.forEach((x, i) => {
+  if (i > 0 && q[i - 1].category !== x.category && q.findIndex(y => y.category === x.category) < i) errs.push(`id ${x.id}: ${x.category} 섹션 밖에 있음`);
 });
+CATS.forEach(c => {
+  const count = q.filter(x => x.category === c).length;
+  if (count < 10) errs.push(`${c}: ${count}문제 (전체 도전과 카테고리 도전에 10문제 이상 필요)`);
+  if (!html.includes(`// ${c} (${count}문제)`)) errs.push(`${c}: 섹션 주석의 문제 수가 실제(${count})와 다름`);
+});
+if (q.length < 20) errs.push(`문제 수 ${q.length} (스피드 퀴즈에 20문제 이상 필요)`);
 if (!html.includes(`${q.length}개 문제에서 무작위 출제`)) errs.push('부제의 문제 수가 데이터와 다름');
-const pos = [0, 1, 2, 3].map(k => q.filter(x => x.correctAnswer === k).length);
+if (!html.includes(`<span id="totalQuestions">${q.length}</span>`)) errs.push('#totalQuestions 기본값이 데이터와 다름');
+if (!fs.readFileSync('CLAUDE.md', 'utf8').includes(`현재 ${q.length}문제`)) errs.push('CLAUDE.md의 "현재 N문제"가 데이터와 다름');
 console.log(errs.length ? errs.join('\n') : '형식 오류 없음');
-console.log('정답 위치 분포 (1~4번):', pos.join(' / '));
+console.log(`\n전체 ${q.length}문제, 정답 위치 분포 (1~4번): ${[0, 1, 2, 3].map(k => q.filter(x => x.correctAnswer === k).length).join(' / ')}`);
+CATS.forEach(c => {
+  const l = q.filter(x => x.category === c), n = d => l.filter(x => x.difficulty === d).length;
+  console.log(`  ${c}: ${l.length}문제, easy ${n('easy')} / medium ${n('medium')} / hard ${n('hard')}`);
+});
 ```
 
-정답 위치가 한 번호에 크게 몰려 있으면 보고서에 참고로 적습니다.
+문제 수와 난이도 비율은 고정값으로 검사하지 않고 실제 값을 보여 줍니다. 아래에 해당하면 보고서에 참고로 적습니다.
+
+* 정답 위치가 한 번호에 크게 몰려 있음
+* 카테고리마다 문제 수나 난이도 비율(기본 easy 4 : medium 5 : hard 2, 약 36% : 45% : 18%)이 크게 다름
 
 ## 2단계: 내용 검증 (대상 문제마다)
 
