@@ -20,3 +20,6 @@ node_modules/
 
 # 브라우저에서 내보낸 게임 기록 (플레이어 이름 포함, /quiz-stats·/quiz-leaderboard용)
 quiz-history*.json
+
+# quiz-daily 백업
+Study-03-basic/backups/
