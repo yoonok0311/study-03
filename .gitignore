@@ -23,3 +23,6 @@ quiz-history*.json
 
 # quiz-daily 백업
 Study-03-basic/backups/
+
+# 선생님 모드 학생 기록 (학생 이름 포함)
+Study-03-basic/teacher/

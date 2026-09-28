@@ -58,6 +58,10 @@
 * 단축키: `1`~`4` 답 선택, `H` 힌트, `P`/`Esc` 일시정지 (한글 입력 상태에서도 되도록 `e.code`로 확인). `↑`/`↓`로 선택지 사이 이동. 피드백 모달이 뜨면 포커스가 "다음 문제" 버튼으로 가고 `Enter`로 다음 문제
 * 화면 문구는 모두 한국어
 
+## 선생님 모드 (`.claude/commands/teacher-*.md`)
+
+게임 코드가 아니라 명령어로만 된 기능입니다. 학생마다 내보낸 기록 파일(`quizBasic.history`)을 `teacher/inbox/`에 모아 `/teacher-collect`로 `teacher/class.json` 하나로 합치고, `/teacher-overview`(반 성적표), `/teacher-compare`(학생 비교), `/teacher-weak`(카테고리 약점), `/teacher-report`(HTML 리포트, `teacher/reports/`)가 그 파일을 읽습니다. `/teacher-mode`는 이 단계를 순서대로 실행하고, `/teacher-sample`은 연습용 가상 학생 기록을 `teacher/sample/`에 만듭니다. 순위·통계는 기록 저장 스크립트의 함수(`getPlayerStats`, `getPersonalBest`, `boardKeyOf`, `inPeriod`)를 Node에서 불러 계산하므로, 그 함수나 기록 필드를 바꾸면 선생님 모드 명령어도 확인합니다. `teacher/`에는 학생 이름이 들어 있어 저장소 루트 `.gitignore`로 제외합니다.
+
 ## Git
 
 별도 저장소가 아니라 상위 폴더 `study-03/`의 git 저장소(기본 브랜치 `main`)에 포함됩니다. 사용자가 명시적으로 요청할 때만 커밋합니다.
