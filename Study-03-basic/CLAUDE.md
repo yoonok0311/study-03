@@ -60,7 +60,7 @@
 
 ## 선생님 모드 (`.claude/commands/teacher-*.md`)
 
-게임 코드가 아니라 명령어로만 된 기능입니다. 학생마다 내보낸 기록 파일(`quizBasic.history`)을 `teacher/inbox/`에 모아 `/teacher-collect`로 `teacher/class.json` 하나로 합치고, `/teacher-overview`(반 성적표), `/teacher-compare`(학생 비교), `/teacher-weak`(카테고리 약점), `/teacher-report`(HTML 리포트, `teacher/reports/`)가 그 파일을 읽습니다. `/teacher-mode`는 이 단계를 순서대로 실행하고, `/teacher-sample`은 연습용 가상 학생 기록을 `teacher/sample/`에 만듭니다. 순위·통계는 기록 저장 스크립트의 함수(`getPlayerStats`, `getPersonalBest`, `boardKeyOf`, `inPeriod`)를 Node에서 불러 계산하므로, 그 함수나 기록 필드를 바꾸면 선생님 모드 명령어도 확인합니다. `teacher/`에는 학생 이름이 들어 있어 저장소 루트 `.gitignore`로 제외합니다.
+게임 코드가 아니라 명령어로만 된 기능입니다. 학생마다 내보낸 기록 파일(`quizBasic.history`)을 `teacher/inbox/`에 모아 `/teacher-collect`로 `teacher/class.json` 하나로 합치고, `/teacher-overview`(반 성적표), `/teacher-compare`(학생 비교), `/teacher-weak`(카테고리 약점), `/teacher-report`(HTML 리포트), `/teacher-dashboard`(카드형 HTML 대시보드)가 그 파일을 읽습니다 (HTML은 `teacher/reports/`에 저장). `/teacher-mode`는 이 단계를 순서대로 실행하고, `/teacher-sample`은 연습용 가상 학생 기록을 `teacher/sample/`에 만듭니다. 순위·통계는 기록 저장 스크립트의 함수(`getPlayerStats`, `getPersonalBest`, `boardKeyOf`, `inPeriod`)를 Node에서 불러 계산하므로, 그 함수나 기록 필드를 바꾸면 선생님 모드 명령어도 확인합니다. `teacher/`에는 학생 이름이 들어 있어 저장소 루트 `.gitignore`로 제외합니다.
 
 ## Git
 
