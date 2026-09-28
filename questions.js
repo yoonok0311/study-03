@@ -22,7 +22,7 @@ const QUESTIONS = [
   { id: 16, category: "과학", difficulty: "medium", question: "원소 기호 'Fe'가 나타내는 원소는?", options: ["철", "불소", "금", "납"], correctAnswer: 0, explanation: "Fe는 라틴어 ferrum에서 온 철의 원소 기호입니다." },
   { id: 17, category: "과학", difficulty: "medium", question: "사람의 혈액에서 산소를 운반하는 세포는?", options: ["백혈구", "혈소판", "적혈구", "림프구"], correctAnswer: 2, explanation: "적혈구의 헤모글로빈이 산소를 운반합니다." },
   { id: 18, category: "과학", difficulty: "hard", question: "상대성 이론을 발표한 과학자는?", options: ["뉴턴", "아인슈타인", "보어", "갈릴레이"], correctAnswer: 1, explanation: "아인슈타인은 1905년 특수 상대성 이론, 1915년 일반 상대성 이론을 발표했습니다." },
-  { id: 19, category: "과학", difficulty: "medium", question: "1기압에서 물이 끓는 온도는?", options: ["90℃", "100℃", "110℃", "120℃"], correctAnswer: 1, explanation: "1기압에서 물의 끓는점은 100℃입니다." },
+  { id: 19, category: "과학", difficulty: "medium", question: "1기압에서 물이 끓는 온도는?", options: ["90℃", "100℃", "110℃", "120℃"], correctAnswer: 1, explanation: "1기압에서 물의 끓는점은 약 100℃입니다. 현재 온도 기준으로 정밀하게 재면 약 99.97℃입니다." },
   { id: 20, category: "과학", difficulty: "hard", question: "DNA의 이중 나선 구조를 밝힌 과학자로 알려진 두 사람은?", options: ["왓슨과 크릭", "멘델과 다윈", "퀴리 부부", "파스퇴르와 코흐"], correctAnswer: 0, explanation: "왓슨과 크릭은 1953년 DNA 이중 나선 구조 모델을 발표했습니다. 이 발견에는 로절린드 프랭클린의 X선 회절 사진도 중요한 역할을 했습니다." },
   { id: 21, category: "과학", difficulty: "easy", question: "지구의 자연 위성은?", options: ["화성", "금성", "달", "태양"], correctAnswer: 2, explanation: "달은 지구의 유일한 영구적인 자연 위성입니다." },
   { id: 22, category: "과학", difficulty: "medium", question: "원자 번호 1번인 원소는?", options: ["헬륨", "수소", "산소", "탄소"], correctAnswer: 1, explanation: "수소는 양성자 1개를 가진 원자 번호 1번 원소로, 가장 가볍습니다." },
