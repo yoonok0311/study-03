@@ -284,6 +284,13 @@
             letter-spacing: 0;
         }
 
+        /* 버튼 모양의 링크 (선생님 대시보드) */
+        a.btn {
+            display: inline-block;
+            text-align: center;
+            text-decoration: none;
+        }
+
         .start-links {
             display: flex;
             justify-content: center;
@@ -1356,6 +1363,7 @@
                 <div class="start-links">
                     <button id="startLeaderboardBtn" class="btn btn-outline btn-small">🏅 순위표</button>
                     <button id="startStatsBtn" class="btn btn-outline btn-small">📊 내 기록</button>
+                    <a href="teacher-dashboard.html" target="_blank" rel="noopener" class="btn btn-outline btn-small">👩‍🏫 선생님 대시보드<span class="sr-only"> (새 탭에서 열림)</span></a>
                 </div>
             </div>
         </section>

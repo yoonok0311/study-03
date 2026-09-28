@@ -10,7 +10,7 @@
 
 ## 구조
 
-모든 코드가 `index.html` 파일 하나에 들어 있습니다. `<head>`에 저장된 테마를 먼저 적용하는 `<script id="theme-init">`와 CSS(`<style>`)가 있고, `<body>` 끝의 `<script>` 4개에 순서대로 문제 데이터, 점수 계산, 기록 저장과 순위, 게임 로직이 있습니다. 문제 데이터는 속성 없는 첫 번째 `<script>`여야 합니다 (`.claude/commands`의 검사 스크립트가 `/<script>([sS]*?)</script>/`로 찾음).
+게임의 모든 코드가 `index.html` 파일 하나에 들어 있습니다 (선생님용 `teacher-dashboard.html`은 아래 선생님 모드 참고). `<head>`에 저장된 테마를 먼저 적용하는 `<script id="theme-init">`와 CSS(`<style>`)가 있고, `<body>` 끝의 `<script>` 4개에 순서대로 문제 데이터, 점수 계산, 기록 저장과 순위, 게임 로직이 있습니다. 문제 데이터는 속성 없는 첫 번째 `<script>`여야 합니다 (`.claude/commands`의 검사 스크립트가 `/<script>([sS]*?)</script>/`로 찾음).
 
 * 화면: 화면 5개(`#startScreen`, `#quizScreen`, `#resultScreen`, 순위표 `#leaderboardScreen`, 내 기록 `#statsScreen`)와 피드백 모달(`#feedbackModal`), 일시정지 화면(`#pauseOverlay`). `active` 클래스가 붙은 화면만 보이고, 모달은 `show` 클래스로 표시합니다. `hidden` 클래스는 요소를 숨깁니다. 화면은 `showScreen`으로 바꾸고, 바뀐 화면의 `.screen-heading`으로 포커스를 옮깁니다.
 * 문제 데이터 (첫 번째 `<script>`): 배열 `quizQuestions`. 카테고리 순서대로 섹션 주석과 함께 정리되어 있습니다.
@@ -60,7 +60,9 @@
 
 ## 선생님 모드 (`.claude/commands/teacher-*.md`)
 
-게임 코드가 아니라 명령어로만 된 기능입니다. 학생마다 내보낸 기록 파일(`quizBasic.history`)을 `teacher/inbox/`에 모아 `/teacher-collect`로 `teacher/class.json` 하나로 합치고, `/teacher-overview`(반 성적표), `/teacher-compare`(학생 비교), `/teacher-weak`(카테고리 약점), `/teacher-report`(HTML 리포트), `/teacher-dashboard`(카드형 HTML 대시보드)가 그 파일을 읽습니다 (HTML은 `teacher/reports/`에 저장). `/export-report`는 그 HTML을 CSV(표마다 하나)나 PDF(Edge·Chrome 헤드리스 인쇄)로 `teacher/reports/`에 저장합니다. `/teacher-mode`는 이 단계를 순서대로 실행하고, `/teacher-sample`은 연습용 가상 학생 기록을 `teacher/sample/`에 만듭니다. 순위·통계는 기록 저장 스크립트의 함수(`getPlayerStats`, `getPersonalBest`, `boardKeyOf`, `inPeriod`)를 Node에서 불러 계산하므로, 그 함수나 기록 필드를 바꾸면 선생님 모드 명령어도 확인합니다. `teacher/`에는 학생 이름이 들어 있어 저장소 루트 `.gitignore`로 제외합니다.
+대부분 게임 코드가 아니라 명령어로 된 기능입니다. 학생마다 내보낸 기록 파일(`quizBasic.history`)을 `teacher/inbox/`에 모아 `/teacher-collect`로 `teacher/class.json` 하나로 합치고, `/teacher-overview`(반 성적표), `/teacher-compare`(학생 비교), `/teacher-weak`(카테고리 약점), `/teacher-report`(HTML 리포트), `/teacher-dashboard`(카드형 HTML 대시보드)가 그 파일을 읽습니다 (HTML은 `teacher/reports/`에 저장). `/export-report`는 그 HTML을 CSV(표마다 하나)나 PDF(Edge·Chrome 헤드리스 인쇄)로 `teacher/reports/`에 저장합니다. `/teacher-mode`는 이 단계를 순서대로 실행하고, `/teacher-sample`은 연습용 가상 학생 기록을 `teacher/sample/`에 만듭니다. 순위·통계는 기록 저장 스크립트의 함수(`getPlayerStats`, `getPersonalBest`, `boardKeyOf`, `inPeriod`)를 Node에서 불러 계산하므로, 그 함수나 기록 필드를 바꾸면 선생님 모드 명령어도 확인합니다. `teacher/`에는 학생 이름이 들어 있어 저장소 루트 `.gitignore`로 제외합니다.
+
+브라우저용 `teacher-dashboard.html`은 게임 시작 화면의 "👩‍🏫 선생님 대시보드" 링크(`target="_blank"`)로 새 탭에서 열립니다. 학생 데이터가 없는 페이지라 저장소와 GitHub Pages에 올라가고, 선생님이 기록 파일(학생별 `quiz-history-*.json` 여러 개나 `class.json`)을 고르거나 끌어다 놓으면 브라우저 안에서만 읽어 `/teacher-dashboard`와 같은 대시보드를 그립니다 (파일 검사와 중복 제거는 `/teacher-collect`와 같은 규칙, 🖨️ PDF로 저장 버튼 포함). CSS와 스크립트를 한 파일에 담고, 게임의 테마 설정(`quizBasic.theme`)을 따릅니다. 순위·통계 함수(`boardKeyOf`, `compareRecords`, `isRankable`, `getPersonalBest`, `getPlayerNames`, `getPlayerStats`)는 `index.html`의 기록 저장 스크립트에서 복사한 것이므로, 그쪽을 바꾸면 이 파일과 `/teacher-dashboard` 스크립트도 함께 고칩니다.
 
 ## Git
 

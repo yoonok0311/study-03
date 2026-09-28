@@ -14,7 +14,7 @@ argument-hint: "[대시보드 제목, 비우면 \"선생님 대시보드\"]"
 
 ## 대시보드 내용
 
-한 파일에 CSS를 모두 담고(외부 파일·CDN·스크립트 없음), 보라색 그라데이션 헤더와 3열 카드 격자로 구성합니다. 시스템 다크 모드를 따르고, 좁은 화면에서는 카드가 한 줄씩 쌓이며 표는 가로로 스크롤됩니다.
+한 파일에 CSS와 짧은 인쇄용 스크립트를 모두 담고(외부 파일·CDN 없음), 보라색 그라데이션 헤더와 3열 카드 격자로 구성합니다. 헤더의 **🖨️ PDF로 저장** 버튼(또는 `Ctrl+P`)은 브라우저 인쇄 창을 열고, 대상을 "PDF로 저장"으로 고르면 A4 가로·라이트 테마·카드 3열로 저장됩니다 (버튼은 인쇄물에 나오지 않고, 기본 파일 이름은 제목과 날짜). 시스템 다크 모드를 따르고, 좁은 화면에서는 카드가 한 줄씩 쌓이며 표는 가로로 스크롤됩니다.
 
 1. **📋 전체 현황**: 학생 수, 평균 정답률, 최고·최저 정답률과 학생 이름, 목표 달성률(정답률 `GOAL`(70%) 이상인 학생 비율)
 2. **📈 정답률 분포**: 90~100 / 80~89 / 70~79 / 60~69 / 50~59 / 50% 미만 구간별 학생 수 막대 (막대에 마우스를 올리면 학생 이름)
@@ -69,9 +69,10 @@ const rows = R.getPlayerNames(list).map(name => {
 const enough = rows.filter(r => r.answered >= MIN_ANSWERED), pool = enough.length ? enough : rows;
 const base = pool.map(r => r.accuracy).sort((a, b) => a - b);
 const mean = Math.round(sum(base, x => x) / base.length);
-const ranked = [...enough].sort((a, b) => b.accuracy - a.accuracy || b.answered - a.answered);
+// 20문제 이상 푼 학생이 없으면 모든 학생으로 순위를 매김 (Top 3·최고·최저가 비지 않게)
+const ranked = [...pool].sort((a, b) => b.accuracy - a.accuracy || b.answered - a.answered);
 ranked.forEach((r, i) => { r.rank = i && ranked[i - 1].accuracy === r.accuracy ? ranked[i - 1].rank : i + 1; });
-const order = [...ranked, ...rows.filter(r => r.answered < MIN_ANSWERED).sort((a, b) => b.accuracy - a.accuracy)];
+const order = [...ranked, ...rows.filter(r => !pool.includes(r)).sort((a, b) => b.accuracy - a.accuracy)];
 const flags = r => [r.answered < MIN_ANSWERED && '🔸표본 적음', r.answered >= MIN_ANSWERED && r.accuracy <= mean - LOW_GAP && '🔻평균보다 낮음',
   r.trend !== null && r.trend <= -TREND_GAP && '📉하락', r.trend !== null && r.trend >= TREND_GAP && '📈상승', r.idle >= IDLE_DAYS && `💤${r.idle}일 쉼`].filter(Boolean);
 const signed = n => (n === null ? '-' : (n > 0 ? '+' : '') + n + '%p');
@@ -155,8 +156,17 @@ tbody tr:last-child > * { border-bottom:0; }
 td small { color:var(--muted); }
 td.flags { white-space:normal; min-width:130px; }
 .who small { display:block; white-space:nowrap; overflow:hidden; text-overflow:ellipsis; }
+header { position:relative; }
+.print-btn { position:absolute; top:16px; right:16px; border:1px solid rgba(255,255,255,.55); background:rgba(255,255,255,.16); color:#fff; border-radius:999px; padding:6px 14px; font:inherit; font-size:.85rem; cursor:pointer; }
+.print-btn:hover { background:rgba(255,255,255,.3); } .print-btn:focus-visible { outline:2px solid #fff; outline-offset:2px; }
+@media (max-width:600px) { .print-btn { position:static; margin-top:14px; } }
+@page { size:A4 landscape; margin:10mm; }
+@media print { * { -webkit-print-color-adjust:exact; print-color-adjust:exact; } .print-btn { display:none; }
+  body { background:#fff; } main { padding:0; max-width:none; } header, .card { box-shadow:none; }
+  .grid { grid-template-columns:repeat(3, 1fr); } .scroll { overflow:visible; } table { min-width:0; font-size:11px; }
+  th, td { padding:6px; } thead th { white-space:normal; word-break:keep-all; } tr, .card, .stat, .item, .hbar { break-inside:avoid; } }
 </style></head><body><main>
-<header><h1>📊 ${esc(TITLE)}</h1><p>생성일시: ${stamp} · 기록 ${day(list[0].timestamp)} ~ ${day(list[list.length - 1].timestamp)}</p></header>
+<header><h1>📊 ${esc(TITLE)}</h1><p>생성일시: ${stamp} · 기록 ${day(list[0].timestamp)} ~ ${day(list[list.length - 1].timestamp)}</p><button type="button" class="print-btn" title="인쇄 창에서 대상을 'PDF로 저장'으로 고르세요">🖨️ PDF로 저장</button></header>
 <div class="grid">
 <section class="card"><h2>📋 전체 현황</h2><div class="stats">
   <div class="stat"><strong>${rows.length}명</strong><span>총 학생 수</span></div>
@@ -186,7 +196,18 @@ ${catRows.map(c => `  <div class="hbar"><div class="top"><span>${esc(c.c)}</span
 ${order.map(r => `<tr><td class="num">${r.rank || '-'}</td><th scope="row">${esc(r.name)}</th><td class="num ${tone(r.accuracy)}"><b>${r.accuracy}%</b></td><td class="num ${diffCls(r.accuracy - mean)}">${signed(r.accuracy - mean)}</td><td class="num">${r.answered}</td><td class="num">${r.plays} <small>(${r.early})</small></td><td class="num">${r.avgTime}초</td><td class="num">${r.hints}</td><td class="num">${r.streak}</td><td class="num">${r.fullBest ?? '-'}</td><td class="num ${diffCls(r.trend)}">${signed(r.trend)}</td><td>${r.idle ? r.idle + '일 전' : '오늘'}</td><td class="flags">${flags(r).map(esc).join(" ") || "-"}</td></tr>`).join('\n')}
 </tbody></table></div>
 <p class="note">평균·분포·목표 달성률은 ${MIN_ANSWERED}문제 이상 푼 학생 기준. 🔻 반 평균보다 ${LOW_GAP}%p 이상 낮음 · 📉/📈 뒤쪽 절반 판 정답률이 ${TREND_GAP}%p 이상 낮음/높음(4판 이상) · 💤 ${IDLE_DAYS}일 이상 쉼 · 🔸 ${MIN_ANSWERED}문제 미만. 전체 도전 최고는 전체 도전 · 전체 난이도에서 끝까지 푼 게임의 최고 점수.</p></section>
-</div></main></body></html>
+</div></main>
+<script>
+// 인쇄(PDF 저장)할 때는 라이트 테마로, 파일 이름은 제목과 날짜로
+(() => {
+  const root = document.documentElement, title = document.title;
+  let theme = null;
+  addEventListener('beforeprint', () => { theme = root.getAttribute('data-theme'); root.setAttribute('data-theme', 'light'); document.title = title + ' ' + '${stamp.slice(0, 10)}'; });
+  addEventListener('afterprint', () => { if (theme === null) root.removeAttribute('data-theme'); else root.setAttribute('data-theme', theme); document.title = title; });
+  document.querySelector('.print-btn').addEventListener('click', () => print());
+})();
+</script>
+</body></html>
 `;
 fs.mkdirSync(OUT_DIR, { recursive: true });
 fs.writeFileSync(file, page);
