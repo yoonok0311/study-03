@@ -37,7 +37,7 @@ CATS.forEach(c => {
   if (q.filter(x => x.category === c).length !== 11 || n('easy') !== 4 || n('medium') !== 5 || n('hard') !== 2)
     errs.push(`${c}: easy ${n('easy')} / medium ${n('medium')} / hard ${n('hard')} (4/5/2여야 함)`);
 });
-if (!html.includes(`${q.length}개의 도전적인 문제`)) errs.push('부제의 문제 수가 데이터와 다름');
+if (!html.includes(`${q.length}개 문제에서 무작위 출제`)) errs.push('부제의 문제 수가 데이터와 다름');
 const pos = [0, 1, 2, 3].map(k => q.filter(x => x.correctAnswer === k).length);
 console.log(errs.length ? errs.join('\n') : '형식 오류 없음');
 console.log('정답 위치 분포 (1~4번):', pos.join(' / '));
