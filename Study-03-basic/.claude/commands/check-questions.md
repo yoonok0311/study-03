@@ -38,6 +38,10 @@ CATS.forEach(c => {
   const count = q.filter(x => x.category === c).length;
   if (count < 10) errs.push(`${c}: ${count}문제 (전체 도전과 카테고리 도전에 10문제 이상 필요)`);
   if (!html.includes(`// ${c} (${count}문제)`)) errs.push(`${c}: 섹션 주석의 문제 수가 실제(${count})와 다름`);
+  // 문제 난이도 선택: 쉬움은 easy+medium, 어려움은 medium+hard에서 카테고리마다 10문제를 뽑음
+  const n = d => q.filter(x => x.category === c && d.includes(x.difficulty)).length;
+  if (n(['easy', 'medium']) < 10) errs.push(`${c}: easy+medium ${n(['easy', 'medium'])}문제 (난이도 '쉬움'에 10문제 이상 필요)`);
+  if (n(['medium', 'hard']) < 10) errs.push(`${c}: medium+hard ${n(['medium', 'hard'])}문제 (난이도 '어려움'에 10문제 이상 필요)`);
 });
 if (q.length < 20) errs.push(`문제 수 ${q.length} (스피드 퀴즈에 20문제 이상 필요)`);
 if (!html.includes(`${q.length}개 문제에서 무작위 출제`)) errs.push('부제의 문제 수가 데이터와 다름');
@@ -54,7 +58,7 @@ CATS.forEach(c => {
 문제 수와 난이도 비율은 고정값으로 검사하지 않고 실제 값을 보여 줍니다. 아래에 해당하면 보고서에 참고로 적습니다.
 
 * 정답 위치가 한 번호에 크게 몰려 있음
-* 카테고리마다 문제 수나 난이도 비율(기본 easy 4 : medium 5 : hard 2, 약 36% : 45% : 18%)이 크게 다름
+* 카테고리마다 문제 수나 난이도 비율(기본 easy 7 : medium 9 : hard 4, 약 35% : 45% : 20%)이 크게 다름
 
 ## 2단계: 내용 검증 (대상 문제마다)
 
