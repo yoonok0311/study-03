@@ -35,7 +35,7 @@
 * `options`: 정확히 4개의 문자열 (단축키 1~4가 선택지 4개를 전제로 함)
 * `correctAnswer`: `options`의 인덱스(0부터 시작)
 * 현재 44문제, 카테고리마다 11문제 (easy 4, medium 5, hard 2). `id`는 배열 순서대로 1부터 빠짐없이 매깁니다.
-* 문제 수를 바꾸면 `index.html`의 부제("44개의 도전적인 문제")와 `#totalQuestions` 기본값도 함께 고칩니다.
+* 문제 수를 바꾸면 `index.html`의 부제("44개 문제에서 무작위 출제")와 `#totalQuestions` 기본값도 함께 고칩니다.
 
 ## 동작 참고
 
